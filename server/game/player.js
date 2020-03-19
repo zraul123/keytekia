@@ -143,7 +143,7 @@ class Player extends GameObject {
     }
 
     get creaturesInPlay() {
-        return this.cardsInPlay.filter(card => card.type === 'creature');
+        return this.cardsInPlay.filter(card => card.type === 'unit');
     }
 
     /**

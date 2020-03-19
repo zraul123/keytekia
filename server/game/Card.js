@@ -380,7 +380,7 @@ class Card extends EffectSource {
     }
 
     onLeavesPlay() {
-        if(this.type === 'creature' && this.hasToken('amber') && this.controller.opponent) {
+        if(this.type === 'unit' && this.hasToken('amber') && this.controller.opponent) {
             this.game.actions.gainAmber({ amount: this.tokens.amber }).resolve(this.controller.opponent, this.game.getFrameworkContext());
         }
 
@@ -662,7 +662,7 @@ class Card extends EffectSource {
      * Opponent cards only, specific factions, etc) for this card.
      */
     canAttach(card, context) { // eslint-disable-line no-unused-vars
-        return card && card.getType() === 'creature' && this.canPlayAsUpgrade();
+        return card && card.getType() === 'unit' && this.canPlayAsUpgrade();
     }
 
     use(player, ignoreHouse = false) {
@@ -709,9 +709,9 @@ class Card extends EffectSource {
             context.ignoreHouse = ignoreHouse;
             return !action.meetsRequirements(context);
         });
-        let canFight = actions.findIndex(action => action.title === 'Fight with this creature') >= 0;
+        let canFight = actions.findIndex(action => action.title === 'Fight with this unit') >= 0;
         if(this.getEffects('mustFightIfAble').length > 0 && canFight) {
-            actions = actions.filter(action => action.title === 'Fight with this creature');
+            actions = actions.filter(action => action.title === 'Fight with this unit');
         }
 
         return actions;
@@ -719,12 +719,12 @@ class Card extends EffectSource {
 
     getFightAction() {
         return this.action({
-            title: 'Fight with this creature',
-            condition: context => this.checkRestrictions('fight', context) && this.type === 'creature',
+            title: 'Fight with this unit',
+            condition: context => this.checkRestrictions('fight', context) && this.type === 'unit',
             printedAbility: false,
             target: {
-                activePromptTitle: 'Choose a creature to attack',
-                cardType: ['creature', 'player'],
+                activePromptTitle: 'Choose a unit to attack',
+                cardType: ['unit', 'player'],
                 controller: 'opponent',
                 gameAction: new ResolveFightAction({ attacker: this })
             }
@@ -733,8 +733,8 @@ class Card extends EffectSource {
 
     getReapAction() {
         return this.action({
-            title: 'Reap with this creature',
-            condition: context => this.checkRestrictions('reap', context) && this.type === 'creature',
+            title: 'Reap with this unit',
+            condition: context => this.checkRestrictions('reap', context) && this.type === 'unit',
             printedAbility: false,
             gameAction: new ResolveReapAction()
         });
@@ -747,7 +747,7 @@ class Card extends EffectSource {
     getActions(location = this.location) {
         let actions = [];
         if(location === 'hand') {
-            if(this.type === 'creature') {
+            if(this.type === 'unit') {
                 actions.push(new PlayCreatureAction(this));
             } else if(this.type === 'artifact') {
                 actions.push(new PlayArtifactAction(this));
@@ -760,7 +760,7 @@ class Card extends EffectSource {
             }
 
             actions.push(new DiscardAction(this));
-        } else if(location === 'play area' && this.type === 'creature') {
+        } else if(location === 'play area' && this.type === 'unit') {
             actions.push(this.getFightAction());
             actions.push(this.getReapAction());
             actions.push(this.getRemoveStunAction());
@@ -783,7 +783,7 @@ class Card extends EffectSource {
     }
 
     isOnFlank(flank) {
-        if(this.type !== 'creature') {
+        if(this.type !== 'unit') {
             return false;
         }
 
@@ -812,7 +812,7 @@ class Card extends EffectSource {
     }
 
     get neighbors() {
-        if(this.type !== 'creature') {
+        if(this.type !== 'unit') {
             return [];
         } else if(this.clonedNeighbors) {
             return this.clonedNeighbors;
