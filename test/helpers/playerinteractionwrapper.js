@@ -403,12 +403,12 @@ class PlayerInteractionWrapper {
     }
 
     fightWith(creature, target) {
-        if(creature.type !== 'creature' || !this.hasPrompt('Choose a card to play, discard or use')) {
+        if(creature.type !== 'unit' || !this.hasPrompt('Choose a card to play or use')) {
             throw new Error(`${creature.name} cannot fight now`);
         }
 
         this.clickCard(creature);
-        this.clickPrompt('Fight with this creature');
+        this.clickPrompt('Attack this creature');
         if(target) {
             this.clickCard(target);
         }

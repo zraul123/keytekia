@@ -167,7 +167,7 @@ class Card extends EffectSource {
     }
 
     play(properties) {
-        if(this.type === 'action') {
+        if(this.type === 'spell') {
             properties.location = properties.location || 'being played';
         }
 
@@ -375,7 +375,7 @@ class Card extends EffectSource {
                 (!context ||
                 !context.player ||
                 context.player.checkRestrictions(actionType, context)
-            );
+                );
     }
 
 
@@ -555,7 +555,7 @@ class Card extends EffectSource {
         let actions = this.getActions();
         actions = actions.filter(action => {
             let context = action.createContext(player);
-            return !action.meetsRequirements(context)
+            return !action.meetsRequirements(context);
         });
         let canFight = actions.findIndex(action => action.title === 'Fight with this unit') >= 0;
         if(this.getEffects('mustFightIfAble').length > 0 && canFight) {
@@ -673,7 +673,7 @@ class Card extends EffectSource {
             id: this.cardData.id,
             image: this.cardData.image,
             canPlay: (activePlayer === this.game.activePlayer) && isController &&
-                (this.getLegalActions(activePlayer, false).length > 0),
+                (this.getLegalActions(activePlayer).length > 0),
             cardback: './img/cards/cardback.png',
             childCards: this.childCards.map(card => {
                 return card.getSummary(activePlayer, hideWhenFaceup);
