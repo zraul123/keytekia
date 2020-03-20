@@ -25,9 +25,8 @@ module.exports = {
     JointGameAction: require('./JointGameAction'),
     LastingEffectAction: require('./LastingEffectAction'),
     LastingEffectCardAction: require('./LastingEffectCardAction'),
-    LoseAmberAction: require('./LoseAmberAction'),
-    ModifyAmberAction: require('./ModifyAmberAction'),
-    ModifyChainsActions: require('./ModifyChainsAction'),
+    LoseManaAction: require('./LoseManaAction'),
+    ModifyManaAction: require('./ModifyManaAction'),
     MoveCardAction: require('./MoveCardAction'),
     MoveOnBattlelineAction: require('./MoveOnBattlelineAction'),
     MoveToFlankAction: require('./MoveToFlankAction'),
@@ -49,6 +48,7 @@ module.exports = {
     ResolveAbilityAction: require('./ResolveAbilityAction'),
     ResolveFightAction: require('./ResolveFightAction'),
     ReturnAmberAction: require('./ReturnAmberAction'),
+    ReturnManaAction: require('./ReturnManaAction'),
     ReturnToDeckAction: require('./ReturnToDeckAction'),
     ReturnToHandAction: require('./ReturnToHandAction'),
     RevealAction: require('./RevealAction'),
@@ -60,7 +60,6 @@ module.exports = {
     StunAction: require('./StunAction'),
     SwapAction: require('./SwapAction'),
     TransferAmberAction: require('./TransferAmberAction'),
-    UnforgeAction: require('./UnforgeAction'),
     UseAction: require('./UseAction'),
     WardAction: require('./WardAction')
 };

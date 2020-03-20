@@ -1,9 +1,9 @@
 const BasePlayAction = require('./BasePlayAction');
 
-class PlayAction extends BasePlayAction {
+class PlaySpell extends BasePlayAction {
     constructor(card) {
         super(card);
-        this.title = 'Play this action';
+        this.title = 'Play this spell';
     }
 
     executeHandler(context) {
@@ -22,4 +22,4 @@ class PlayAction extends BasePlayAction {
     }
 }
 
-module.exports = PlayAction;
+module.exports = PlaySpell;
