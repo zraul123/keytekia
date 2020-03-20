@@ -14,18 +14,6 @@ const ResolveAttackAction = require('./GameActions/ResolveAttackAction');
 const ResolveReapAction = require('./GameActions/ResolveReapAction');
 const RemoveStun = require('./BaseActions/RemoveStun');
 
-const locationActions = {
-    'unit': PlayCreatureAction,
-    'relic': PlayRelicAction,
-    'spell': PlaySpell
-}
-
-const actionTypes = {
-    'playcard': 'PLAY',
-    'usecard' : 'USE',
-    'default' : 'NONE'
-}
-
 class Card extends EffectSource {
     constructor(owner, cardData) {
         super(owner.game);
@@ -108,7 +96,7 @@ class Card extends EffectSource {
         let actions = this.abilities.actions;
         if(this.anyEffect('copyCard')) {
             let mostRecentEffect = _.last(this.effects.filter(effect => effect.type === 'copyCard'));
-            actions = mostRecentEffect.value.getActions(this).map(actionDescriptor => actionDescriptor.action);
+            actions = mostRecentEffect.value.getActions(this);
         }
 
         let effectActions = this.getEffects('gainAbility').filter(ability => ability.abilityType === 'action');
@@ -565,14 +553,9 @@ class Card extends EffectSource {
 
     getLegalActions(player) {
         let actions = this.getActions();
-        actions = actions.filter(actionDescriptor => {
-            if (!actionDescriptor.action) {
-                return;
-            }
-            let action = actionDescriptor.action;
+        actions = actions.filter(action => {
             let context = action.createContext(player);
-            context.ignoreHouse = ignoreHouse;
-            return !action.meetsRequirements(context) && this.controller.hasEnoughMana(actionDescriptor.mana);
+            return !action.meetsRequirements(context);
         });
         let canFight = actions.findIndex(action => action.title === 'Fight with this unit') >= 0;
         if(this.getEffects('mustFightIfAble').length > 0 && canFight) {
@@ -626,36 +609,22 @@ class Card extends EffectSource {
     getActions(location = this.location) {
         let actions = [];
         if(location === 'hand') {
-            if (this.type in locationActions) {
-                actions.push(
-                    this.convertActionType(actionTypes['playcard'], new locationActions[this.type](this),this.mana)
-                    )
+            if(this.type === 'unit') {
+                actions.push(new PlayCreatureAction(this));
+            } else if(this.type === 'relic') {
+                actions.push(new PlayRelicAction(this));
+            } else if(this.type === 'spell') {
+                actions.push(new PlaySpell(this));
             }
 
-            actions.push(
-                this.convertActionType(actionTypes['playcard'], new DiscardAction(this))
-            );
+            actions.push(new DiscardAction(this));
         } else if(location === 'play area' && this.type === 'unit') {
-            var useCardActions = [this.getFightAction(), this.getReapAction(), this.getRemoveStunAction()];
-            actions.push(
-                useCardActions.map(action => this.convertActionType(actionTypes['usecard'], action))
-            );
+            actions.push(this.getFightAction());
+            actions.push(this.getReapAction());
+            actions.push(this.getRemoveStunAction());
         }
 
         return actions.concat(this.actions.slice());
-    }
-
-    convertActionType(type, action, manaRequired = 0) {
-        if (!type || !action) {
-            type = actionTypes['default'];
-            action = {};
-        }
-
-        return {
-            type: type,
-            action: action,
-            mana: manaRequired
-        };
     }
 
     setDefaultController(player) {
