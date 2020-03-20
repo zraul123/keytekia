@@ -19,12 +19,16 @@ export class Deckbuilder extends React.Component {
         this.total = 0;
 
         this.state = {
-            deckName: ''
+            deckName: '',
+            loadedCards: false
         };
     }
 
     componentDidMount() {
-        this.props.loadCards();
+        this.props.loadCards().then(() => {
+            this.state.loadedCards = true
+            this.forceUpdate();
+        });
         this.props.createDeckBuilder();
 
         this.selectFunction = this.selectFunction.bind(this);
@@ -35,6 +39,8 @@ export class Deckbuilder extends React.Component {
     componentWillReceiveProps() {
         if(this.props.cards) {
             this.cards = Object.values(this.props.cards);
+            this.state.loadedCards = true;
+            this.forceUpdate();
         }
     }
 
@@ -46,13 +52,15 @@ export class Deckbuilder extends React.Component {
         return (
             <Panel title={'Deckbuilder'}>
                 <Panel title={'Available Cards'} className='deckbuilder-container available-cards-panel'>
-                    {this.getCards()}
+                    {this.state.loadedCards ? this.getCards() : 'Loading'}
                 </Panel>
                 <Panel title={'Selected Cards (' + this.total + ')' } className='deckbuilder-container selected-cards-panel'>
                     {this.getSelectedCards()}
                 </Panel>
-                Deck name: <input type="text" value={this.state.value} onChange={this.handleChange} />    
-                <button disabled={ this.total < 35 || this.total > 45 } onClick={this.saveButtonClicked}>Save</button>
+                <div className="deck-builder-settings">
+                    Deck name:&nbsp; <input type="text" value={this.state.value} onChange={this.handleChange} />   
+                    <button disabled={ this.total < 35 || this.total > 45 } onClick={this.saveButtonClicked} className="saveButton">Save</button>
+                </div> 
             </Panel>
         );
     }

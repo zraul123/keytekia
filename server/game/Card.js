@@ -14,6 +14,18 @@ const ResolveFightAction = require('./GameActions/ResolveFightAction');
 const ResolveReapAction = require('./GameActions/ResolveReapAction');
 const RemoveStun = require('./BaseActions/RemoveStun');
 
+const locationActions = {
+    'unit': PlayCreatureAction,
+    'artifact': PlayArtifactAction,
+    'action': PlayAction
+}
+
+const actionTypes = {
+    'playcard': 'PLAY',
+    'usecard' : 'USE',
+    'default' : 'NONE'
+}
+
 class Card extends EffectSource {
     constructor(owner, cardData) {
         super(owner.game);
@@ -104,7 +116,7 @@ class Card extends EffectSource {
         let actions = this.abilities.actions;
         if(this.anyEffect('copyCard')) {
             let mostRecentEffect = _.last(this.effects.filter(effect => effect.type === 'copyCard'));
-            actions = mostRecentEffect.value.getActions(this);
+            actions = mostRecentEffect.value.getActions(this).map(actionDescriptor => actionDescriptor.action);
         }
 
         let effectActions = this.getEffects('gainAbility').filter(ability => ability.abilityType === 'action');
@@ -704,10 +716,14 @@ class Card extends EffectSource {
 
     getLegalActions(player, ignoreHouse = false) {
         let actions = this.getActions();
-        actions = actions.filter(action => {
+        actions = actions.filter(actionDescriptor => {
+            if (!actionDescriptor.action) {
+                return;
+            }
+            let action = actionDescriptor.action;
             let context = action.createContext(player);
             context.ignoreHouse = ignoreHouse;
-            return !action.meetsRequirements(context);
+            return !action.meetsRequirements(context) && this.controller.hasEnoughMana(actionDescriptor.mana);
         });
         let canFight = actions.findIndex(action => action.title === 'Fight with this unit') >= 0;
         if(this.getEffects('mustFightIfAble').length > 0 && canFight) {
@@ -747,26 +763,42 @@ class Card extends EffectSource {
     getActions(location = this.location) {
         let actions = [];
         if(location === 'hand') {
-            if(this.type === 'unit') {
-                actions.push(new PlayCreatureAction(this));
-            } else if(this.type === 'artifact') {
-                actions.push(new PlayArtifactAction(this));
-            } else if(this.type === 'action') {
-                actions.push(new PlayAction(this));
+            if (this.type in locationActions) {
+                actions.push(
+                    this.convertActionType(actionTypes['playcard'], new locationActions[this.type](this),this.mana)
+                    )
             }
 
             if(this.canPlayAsUpgrade()) {
-                actions.push(new PlayUpgradeAction(this));
+                actions.push(
+                    this.convertActionType(actionTypes['playcard'], new PlayUpgradeAction(this), this.mana)
+                    )
             }
 
-            actions.push(new DiscardAction(this));
+            actions.push(
+                this.convertActionType(actionTypes['playcard'], new DiscardAction(this))
+            );
         } else if(location === 'play area' && this.type === 'unit') {
-            actions.push(this.getFightAction());
-            actions.push(this.getReapAction());
-            actions.push(this.getRemoveStunAction());
+            var useCardActions = [this.getFightAction(), this.getReapAction(), this.getRemoveStunAction()];
+            actions.push(
+                useCardActions.map(action => this.convertActionType(actionTypes['usecard'], action))
+            );
         }
 
         return actions.concat(this.actions.slice());
+    }
+
+    convertActionType(type, action, manaRequired = 0) {
+        if (!type || !action) {
+            type = actionTypes['default'];
+            action = {};
+        }
+
+        return {
+            type: type,
+            action: action,
+            mana: manaRequired
+        };
     }
 
     setDefaultController(player) {
