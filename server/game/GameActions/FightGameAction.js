@@ -20,7 +20,6 @@ class FightGameAction extends CardGameAction {
 
     getEvent(card, context) {
         return super.createEvent('onInitiateFight', { card, context }, () => {
-            console.log("here!");
             let newContext;
             if(card.stunned) {
                 let removeStunAction = card.getActions().find(action => action.title === 'Remove this creature\'s stun');

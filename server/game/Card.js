@@ -108,7 +108,7 @@ class Card extends EffectSource {
         let actions = this.abilities.actions;
         if(this.anyEffect('copyCard')) {
             let mostRecentEffect = _.last(this.effects.filter(effect => effect.type === 'copyCard'));
-            actions = mostRecentEffect.value.getActions(this).map(actionDescriptor => actionDescriptor.action);
+            actions = mostRecentEffect.value.getActions(this)
         }
 
         let effectActions = this.getEffects('gainAbility').filter(ability => ability.abilityType === 'action');
@@ -526,16 +526,15 @@ class Card extends EffectSource {
         return card && card.getType() === 'unit';
     }
 
-    use(player, ignoreHouse = false) {
+    use(player) {
         let legalActions = this.getLegalActions(player);
 
         if(legalActions.length === 0) {
             return false;
         } else if(legalActions.length === 1) {
             let action = legalActions[0];
-            if(!this.game.activePlayer.optionSettings.confirmOneClick || ignoreHouse) {
+            if(!this.game.activePlayer.optionSettings.confirmOneClick) {
                 let context = action.createContext(player);
-                context.ignoreHouse = ignoreHouse;
                 this.game.resolveAbility(context);
                 return true;
             }
@@ -544,14 +543,8 @@ class Card extends EffectSource {
         let choices = legalActions.map(action => action.title);
         let handlers = legalActions.map(action => () => {
             let context = action.createContext(player);
-            context.ignoreHouse = ignoreHouse;
             this.game.resolveAbility(context);
         });
-        if(!ignoreHouse) {
-            choices = choices.concat('Cancel');
-            handlers = handlers.concat(() => true);
-        }
-
         this.game.promptWithHandlerMenu(player, {
             activePromptTitle: (this.location === 'play area' ? 'Choose an ability:' :
                 { text: 'Play {{card}}:', values: { card: this.name } }),
@@ -565,14 +558,9 @@ class Card extends EffectSource {
 
     getLegalActions(player) {
         let actions = this.getActions();
-        actions = actions.filter(actionDescriptor => {
-            if (!actionDescriptor.action) {
-                return;
-            }
-            let action = actionDescriptor.action;
+        actions = actions.filter(action => {
             let context = action.createContext(player);
-            context.ignoreHouse = ignoreHouse;
-            return !action.meetsRequirements(context) && this.controller.hasEnoughMana(actionDescriptor.mana);
+            return !action.meetsRequirements(context) && this.controller.hasEnoughMana(action.manaCost);
         });
         let canFight = actions.findIndex(action => action.title === 'Fight with this unit') >= 0;
         if(this.getEffects('mustFightIfAble').length > 0 && canFight) {
@@ -626,20 +614,19 @@ class Card extends EffectSource {
     getActions(location = this.location) {
         let actions = [];
         if(location === 'hand') {
-            if (this.type in locationActions) {
-                actions.push(
-                    this.convertActionType(actionTypes['playcard'], new locationActions[this.type](this),this.mana)
-                    )
+            if (this.type === 'unit') {
+                actions.push(new PlayCreatureAction(this));
+            } else if (this.type === 'relic') {
+                actions.push(new PlayRelicAction(this));
+            } else if (this.type === 'spell') {
+                actions.push(new PlaySpell(this));
             }
 
-            actions.push(
-                this.convertActionType(actionTypes['playcard'], new DiscardAction(this))
-            );
+            actions.push(new DiscardAction(this));
         } else if(location === 'play area' && this.type === 'unit') {
-            var useCardActions = [this.getFightAction(), this.getReapAction(), this.getRemoveStunAction()];
-            actions.push(
-                useCardActions.map(action => this.convertActionType(actionTypes['usecard'], action))
-            );
+            actions.push(this.getFightAction());
+            actions.push(this.getReapAction());
+            actions.push(this.getRemoveStunAction());
         }
 
         return actions.concat(this.actions.slice());

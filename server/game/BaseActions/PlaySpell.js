@@ -4,21 +4,24 @@ class PlaySpell extends BasePlayAction {
     constructor(card) {
         super(card);
         this.title = 'Play this spell';
+        this.manaCost = card.mana;
     }
 
     executeHandler(context) {
-        let location = context.source.location;
-        context.player.moveCard(context.source, 'being played');
-        context.game.raiseEvent('onCardPlayed', {
-            player: context.player,
-            card: context.source,
-            originalLocation: location
-        });
-        context.game.queueSimpleStep(() => {
-            if(context.source.location === 'being played') {
-                context.source.owner.moveCard(context.source, 'discard');
-            }
-        });
+        if (context.player.playIfEnoughMana(this.manaCost)) {
+            let location = context.source.location;
+            context.player.moveCard(context.source, 'being played');
+            context.game.raiseEvent('onCardPlayed', {
+                player: context.player,
+                card: context.source,
+                originalLocation: location
+            });
+            context.game.queueSimpleStep(() => {
+                if(context.source.location === 'being played') {
+                    context.source.owner.moveCard(context.source, 'discard');
+                }
+            });
+        }
     }
 }
 
