@@ -15,9 +15,8 @@ class BasePlayAction extends BaseAbility {
     }
 
     displayMessage(context) {
-        let amberMsg = context.source.printedAmber > 0 ? ', gaining ' + context.source.printedAmber.toString() + ' amber' : '';
-        context.game.actions.gainAmber({ amount: context.source.printedAmber }).resolve(context.player, context);
-        context.game.addMessage('{0} plays {1}{2}', context.player, context.source, amberMsg);
+        // context.game.actions.gainAmber({ amount: context.source.printedAmber }).resolve(context.player, context);
+        context.game.addMessage('{0} plays {1}{2}', context.player, context.source);
     }
 
     meetsRequirements(context = this.createContext(), ignoredRequirements = []) {

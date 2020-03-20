@@ -198,7 +198,7 @@ class Player extends GameObject {
     prepareDecks() {
         let deck = new Deck(this.deckData);
         let preparedDeck = deck.prepare(this);
-        this.houses = preparedDeck.houses;
+        this.factions = preparedDeck.factions;
         this.deck = preparedDeck.cards;
         this.allCards = preparedDeck.cards;
         this.deckCards = this.getDeckCards(this.deckData.cards);
@@ -210,8 +210,6 @@ class Player extends GameObject {
     initialise() {
         this.prepareDecks();
         this.shuffleDeck();
-
-        this.keys = { red: false, blue: false, yellow: false };
         this.turn = 1;
         this.readyToStart = false;
         this.opponent = this.game.getOtherPlayer(this);
@@ -337,9 +335,10 @@ class Player extends GameObject {
             return;
         }
 
-        if (card.type !== 'player') {
+        if(card.type !== 'player') {
             this.removeCardFromPile(card);
         }
+
         let location = card.location;
 
         if(location === 'play area') {
@@ -412,7 +411,7 @@ class Player extends GameObject {
         }
 
         if(card.controller !== this) {
-            if (card.controller !== null && card.controller !== undefined) {
+            if(card.controller !== null && card.controller !== undefined) {
                 card.controller.removeCardFromPile(card);
             }
 
@@ -457,53 +456,53 @@ class Player extends GameObject {
     }
 
     getPlayerCard() {
-        var cardData = {
-            "id": "player",
-            "name": "Player",
-            "number": "-1",
-            "image": "player",
-            "expansion": 0,
-            "house": "player",
-            "keywords": [],
-            "traits": [
-                "mutant"
+        const cardData = {
+            'id': 'player',
+            'name': 'Player',
+            'number': '-1',
+            'image': 'player',
+            'expansion': 0,
+            'house': 'player',
+            'keywords': [],
+            'traits': [
+                'mutant'
             ],
-            "type": "player",
-            "rarity": "Rare",
-            "amber": 0,
-            "armor": 0,
-            "power": 0,
-            "text": "Player",
-            "locale": {
-                "de": {
-                    "name": "Player"
+            'type': 'player',
+            'rarity': 'Rare',
+            'amber': 0,
+            'armor': 0,
+            'power': 0,
+            'text': 'Player',
+            'locale': {
+                'de': {
+                    'name': 'Player'
                 },
-                "en": {
-                    "name": "Player"
+                'en': {
+                    'name': 'Player'
                 },
-                "es": {
-                    "name": "Player"
+                'es': {
+                    'name': 'Player'
                 },
-                "fr": {
-                    "name": "Player"
+                'fr': {
+                    'name': 'Player'
                 },
-                "it": {
-                    "name": "Player"
+                'it': {
+                    'name': 'Player'
                 },
-                "pl": {
-                    "name": "Player"
+                'pl': {
+                    'name': 'Player'
                 },
-                "pt": {
-                    "name": "Player"
+                'pt': {
+                    'name': 'Player'
                 },
-                "th": {
-                    "name": "Player"
+                'th': {
+                    'name': 'Player'
                 },
-                "zhhans": {
-                    "name": "Player"
+                'zhhans': {
+                    'name': 'Player'
                 },
-                "zhhant": {
-                    "name": "Player"
+                'zhhant': {
+                    'name': 'Player'
                 }
             }
         };
@@ -548,167 +547,8 @@ class Player extends GameObject {
         return this.anyEffect('showTopConflictCard');
     }
 
-    modifyAmber(amount) {
-        this.amber = Math.max(this.amber + amount, 0);
-    }
-
-    modifyChains(amount) {
-        this.chains = Math.max(this.chains + amount, 0);
-    }
-
-    isHaunted() {
-        return this.discard.length >= 10;
-    }
-
     get maxHandSize() {
         return 6 + this.sumEffects('modifyHandSize');
-    }
-
-    getAvailableHouses() {
-        let availableHouses = this.hand.concat(this.cardsInPlay).reduce((houses, card) => {
-            let cardHouse = card.printedHouse;
-
-            if(card.anyEffect('changeHouse')) {
-                cardHouse = this.getEffects('changeHouse');
-            }
-
-            if(!houses.includes(cardHouse)) {
-                return houses.concat(cardHouse);
-            }
-
-            return houses;
-        }, this.houses);
-        let stopHouseChoice = this.getEffects('stopHouseChoice');
-        let restrictHouseChoice = _.flatten(this.getEffects('restrictHouseChoice')).filter(house => !stopHouseChoice.includes(house));
-        if(restrictHouseChoice.length > 0) {
-            availableHouses = restrictHouseChoice;
-        }
-
-        availableHouses = _.difference(_.uniq(availableHouses), this.getEffects('stopHouseChoice'));
-        return availableHouses;
-    }
-
-    canIgnoreHouseRestrictions(card, context) {
-        return this.getEffects('canUse').some(match => match(card, context));
-    }
-
-    getAmberSources() {
-        return this.cardsInPlay.filter(card => card.anyEffect('keyAmber') && card.hasToken('amber'));
-    }
-
-    canForgeKey(modifier = 0) {
-        if(!this.checkRestrictions('forge', this.game.getFrameworkContext(this))) {
-            return false;
-        }
-
-        if(Object.values(this.keys).every(key => key)) {
-            return false;
-        }
-
-        let alternativeSources = this.getAmberSources().reduce((total, source) => total + source.tokens.amber, 0);
-        return this.amber + alternativeSources >= this.getCurrentKeyCost() + modifier;
-    }
-
-    getCurrentKeyCost() {
-        return this.sumEffects('modifyKeyCost') + 6;
-    }
-
-    getForgedKeys() {
-        return Math.max(0, Object.values(this.keys).filter(key => key).length);
-    }
-
-    forgeKey(modifier) {
-        let cost = Math.max(0, this.getCurrentKeyCost() + modifier);
-        let modifiedCost = cost;
-        let unforgedKeys = this.getUnforgedKeys();
-        let amberSources = this.getAmberSources();
-        if(amberSources.length > 0) {
-            let totalAvailable = amberSources.reduce((total, source) => total + source.tokens.amber, 0);
-            for(let source of amberSources) {
-                this.game.queueSimpleStep(() => {
-                    let max = Math.min(modifiedCost, source.tokens.amber);
-                    let min = Math.max(0, modifiedCost - this.amber - totalAvailable + source.tokens.amber);
-                    if(max === min) {
-                        modifiedCost -= max;
-                        totalAvailable -= max;
-                        source.removeToken('amber', max);
-                        return;
-                    }
-
-                    this.game.promptWithHandlerMenu(this, {
-                        activePromptTitle: {
-                            text: 'How much amber do you want to use from {{card}}?',
-                            values: { card: source.name }
-                        },
-                        source: source,
-                        choices: _.range(min, max + 1),
-                        choiceHandler: choice => {
-                            modifiedCost -= choice;
-                            totalAvailable -= choice;
-                            source.removeToken('amber', choice);
-                        }
-                    });
-                });
-            }
-        }
-
-        if(unforgedKeys.length > 1) {
-            this.game.promptWithHandlerMenu(this, {
-                activePromptTitle: { text: 'Which key would you like to forge?' },
-                source: 'Forge a key.',
-                choices: unforgedKeys,
-                choiceHandler: key => {
-                    this.game.queueSimpleStep(() => {
-                        this.finalizeForge(key.text.toLowerCase(), modifiedCost, cost);
-                    });
-                }
-            });
-        } else {
-            this.game.queueSimpleStep(() => this.finalizeForge(unforgedKeys.shift().text.toLowerCase(), modifiedCost, cost));
-        }
-    }
-
-    finalizeForge(key, modifiedCost, cost) {
-        this.modifyAmber(-modifiedCost);
-
-        if(this.anyEffect('forgeAmberGainedByOpponent')) {
-            this.game.actions.gainAmber({ amount: cost }).resolve(this.opponent, this.game.getFrameworkContext());
-        }
-
-        this.keys[key] = true;
-        this.keyForged.push(key);
-        this.game.addMessage('{0} forges the {1}, paying {2} amber', this.game.activePlayer, `forgedkey${key}`, modifiedCost);
-    }
-
-    unforgeKey(choices) {
-        if(this.keyForged.length > 1) {
-            this.game.promptWithHandlerMenu(this, {
-                activePromptTitle: { text: 'Which key would you like to unforge?' },
-                source: 'Unforge a key.',
-                choices: this.getKeyOptions(choices),
-                choiceHandler: key => {
-                    this.game.queueSimpleStep(() => {
-                        this.keys[key.text.toLowerCase()] = false;
-                        this.keyForged.splice(this.keyForged.findIndex(x => x === key.text.toLowerCase()), 1);
-                        this.game.addMessage('{0} unforges {1}\'s {2}', this.game.activePlayer, this.game.activePlayer.opponent, `forgedkey${key.text.toLowerCase()}`);
-                    });
-                }
-            });
-        } else {
-            this.keys[this.keyForged[0].toLowerCase()] = false;
-            this.keyForged.splice(this.keyForged.findIndex(key => key === this.keyForged[0].toLowerCase()), 1);
-            this.game.addMessage('{0} unforges the {1}', this.game.activePlayer, `forgedkey${this.keyForged[0]}`);
-        }
-    }
-
-    getUnforgedKeys() {
-        return [{ text: 'Red', icon: 'unforgedkeyred' }, { text: 'Blue', icon: 'unforgedkeyblue' }, { text: 'Yellow', icon: 'unforgedkeyyellow' }]
-            .filter(key => !this.keys[key.text.toLowerCase()]);
-    }
-
-    getKeyOptions(options) {
-        return [{ text: 'Red', icon: 'forgedkeyred' }, { text: 'Blue', icon: 'forgedkeyblue' }, { text: 'Yellow', icon: 'forgedkeyyellow' }]
-            .filter(key => options.includes(key.text.toLowerCase()));
     }
 
     getAdditionalCosts(context) {
@@ -740,7 +580,7 @@ class Player extends GameObject {
             deckName: this.deckData.name,
             disconnected: !!this.disconnectedAt,
             activePlayer: this.game.activePlayer === this,
-            houses: this.houses,
+            factions: this.factions,
             id: this.id,
             left: this.left,
             name: this.name,

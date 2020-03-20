@@ -6,11 +6,11 @@ const EffectSource = require('./EffectSource.js');
 const TriggeredAbility = require('./triggeredability');
 
 const DiscardAction = require('./BaseActions/DiscardAction');
-const PlayAction = require('./BaseActions/PlayAction');
+const PlaySpell = require('./BaseActions/PlaySpell');
 const PlayCreatureAction = require('./BaseActions/PlayCreatureAction');
-const PlayArtifactAction = require('./BaseActions/PlayArtifactAction');
-const PlayUpgradeAction = require('./BaseActions/PlayUpgradeAction');
+const PlayRelicAction = require('./BaseActions/PlayRelicAction');
 const ResolveFightAction = require('./GameActions/ResolveFightAction');
+const ResolveAttackAction = require('./GameActions/ResolveAttackAction');
 const ResolveReapAction = require('./GameActions/ResolveReapAction');
 const RemoveStun = require('./BaseActions/RemoveStun');
 
@@ -22,6 +22,7 @@ class Card extends EffectSource {
 
         this.id = cardData.id;
         this.printedName = cardData.name;
+        this.mana = cardData.mana;
         this.image = cardData.image;
         this.setDefaultController(owner);
 
@@ -58,29 +59,20 @@ class Card extends EffectSource {
 
         this.parent = null;
         this.childCards = [];
-        this.clonedNeighbors = null;
 
         this.printedPower = cardData.power;
         this.printedArmor = cardData.armor;
         this.armorUsed = 0;
         this.exhausted = false;
         this.stunned = false;
-        this.moribund = false;
-        this.isFighting = false;
+        this.isAttacking = false;
+        this.resting = true;
 
         this.locale = cardData.locale;
 
         this.menu = [
-            { command: 'exhaust', text: 'Exhaust/Ready' },
-            { command: 'addDamage', text: 'Add 1 damage' },
-            { command: 'remDamage', text: 'Remove 1 damage' },
-            { command: 'addAmber', text: 'Add 1 amber' },
-            { command: 'remAmber', text: 'Remove 1 amber' },
-            { command: 'addEnrage', text: 'Add 1 enrage' },
-            { command: 'remEnrage', text: 'Remove 1 enrage' },
+            { command: 'attack', text: 'Exhaust/Ready' },
             { command: 'stun', text: 'Stun/Remove Stun' },
-            { command: 'addWard', text: 'Add 1 ward' },
-            { command: 'remWard', text: 'Remove 1 ward' },
             { command: 'control', text: 'Give control' }
         ];
 
@@ -155,71 +147,11 @@ class Card extends EffectSource {
     }
 
     setupKeywordAbilities(ability) {
-        // Assault
-        this.abilities.keywordReactions.push(this.interrupt({
-            title: 'Assault',
-            printedAbility: false,
-            when: {
-                onFight: (event, context) => event.attacker === context.source
-            },
-            gameAction: ability.actions.dealDamage(context => ({
-                amount: context.source.getKeywordValue('assault'),
-                target: context.event.card,
-                damageSource: context.source,
-                damageType: 'assault'
-            }))
-        }));
-
-        // Hazardous
-        this.abilities.keywordReactions.push(this.interrupt({
-            title: 'Hazardous',
-            printedAbility: false,
-            when: {
-                onFight: (event, context) => event.card === context.source
-            },
-            gameAction: ability.actions.dealDamage(context => ({
-                amount: context.source.getKeywordValue('hazardous'),
-                target: context.event.attacker,
-                damageSource: context.source,
-                damageType: 'hazardous'
-            }))
-        }));
-
         // Taunt
         this.abilities.keywordPersistentEffects.push(this.persistentEffect({
             condition: () => !!this.getKeywordValue('taunt') && this.type === 'creature',
             printedAbility: false,
-            match: card => this.neighbors.includes(card) && !card.getKeywordValue('taunt'),
             effect: ability.effects.cardCannot('attackDueToTaunt')
-        }));
-
-        // enraged
-        this.abilities.keywordPersistentEffects.push(this.persistentEffect({
-            printedAbility: false,
-            condition: () => {
-                return this.hasToken('enrage') && this.type === 'creature';
-            },
-            match: this,
-            effect: AbilityDsl.effects.mustFightIfAble()
-        }));
-
-        // warded
-        this.abilities.keywordReactions.push(this.interrupt({
-            when: {
-                onCardMarkedForDestruction: (event, context) => event.card === context.source && context.source.warded,
-                onCardLeavesPlay: (event, context) => event.card === context.source && context.source.warded,
-                onDamageDealt: (event, context) => event.card === context.source && !context.event.noGameStateCheck && context.source.warded
-            },
-            autoResolve: true,
-            effect: 'remove its ward token',
-            gameAction: [
-                AbilityDsl.actions.changeEvent(context => ({
-                    event: context.event,
-                    cancel: true,
-                    postHandler: context => context.event.card.moribund = false
-                })),
-                AbilityDsl.actions.removeWard()
-            ]
         }));
 
         // Invulnerable
@@ -242,6 +174,10 @@ class Card extends EffectSource {
         return this.reaction(Object.assign({ play: true, name: 'Play' }, properties));
     }
 
+    attack(properties) {
+        return this.reaction(Object.assign({ attack: true, name: 'Attack' }, properties));
+    }
+
     fight(properties) {
         return this.reaction(Object.assign({ fight: true, name: 'Fight' }, properties));
     }
@@ -256,11 +192,6 @@ class Card extends EffectSource {
 
     leavesPlay(properties) {
         return this.interrupt(Object.assign({ when: { onCardLeavesPlay: (event, context) => event.card === context.source } }, properties));
-    }
-
-    omni(properties) {
-        properties.omni = true;
-        return this.action(properties);
     }
 
     action(properties) {
@@ -340,37 +271,6 @@ class Card extends EffectSource {
         return _.uniq(traits.concat(this.getEffects('addTrait')));
     }
 
-    getHouses() {
-        let combinedHouses = [];
-
-        if(this.anyEffect('changeHouse')) {
-            combinedHouses = combinedHouses.concat((this.getEffects('changeHouse')));
-        } else {
-            let copyEffect = this.mostRecentEffect('copyCard');
-            combinedHouses.push(copyEffect ? copyEffect.printedHouse : this.printedFaction);
-        }
-
-        if(this.anyEffect('addHouse')) {
-            combinedHouses = combinedHouses.concat(this.getEffects('addHouse'));
-        }
-
-        return combinedHouses;
-    }
-
-    hasHouse(house) {
-        if(!house) {
-            return false;
-        }
-
-        house = house.toLowerCase();
-        if(this.anyEffect('changeHouse')) {
-            return this.getEffects('changeHouse').includes(house);
-        }
-
-        let copyEffect = this.mostRecentEffect('copyCard');
-        return (copyEffect ? copyEffect.printedHouse : this.printedFaction) === house || this.getEffects('addHouse').includes(house);
-    }
-
     applyAnyLocationPersistentEffects() {
         _.each(this.persistentEffects, effect => {
             if(effect.location === 'any') {
@@ -440,7 +340,7 @@ class Card extends EffectSource {
 
         this.location = targetLocation;
 
-        if(['play area', 'discard', 'hand', 'purged', 'grafted', 'archives'].includes(targetLocation)) {
+        if(['play area', 'discard', 'hand'].includes(targetLocation)) {
             this.facedown = false;
         }
 
@@ -517,10 +417,6 @@ class Card extends EffectSource {
         }
     }
 
-    readiesDuringReadyPhase() {
-        return !this.anyEffect('doesNotReady');
-    }
-
     isBlank() {
         return this.anyEffect('blank');
     }
@@ -540,15 +436,12 @@ class Card extends EffectSource {
 
     createSnapshot() {
         let clone = new Card(this.owner, this.cardData);
-
-        clone.upgrades = this.upgrades.map(upgrade => upgrade.createSnapshot());
         clone.effects = _.clone(this.effects);
         clone.tokens = _.clone(this.tokens);
         clone.controller = this.controller;
         clone.exhausted = this.exhausted;
         clone.location = this.location;
         clone.parent = this.parent;
-        clone.clonedNeighbors = this.neighbors;
         clone.traits = this.getTraits();
         return clone;
     }
@@ -585,46 +478,6 @@ class Card extends EffectSource {
         return this.sumEffects('modifyArmor') + (copyEffect ? copyEffect.printedArmor : this.printedArmor);
     }
 
-    get amber() {
-        return this.hasToken('amber') ? this.tokens.amber : 0;
-    }
-
-    get enraged() {
-        return this.hasToken('enrage');
-    }
-
-    enrage() {
-        if(!this.hasToken('enrage')) {
-            this.addToken('enrage');
-        }
-    }
-
-    unenrage() {
-        this.clearToken('enrage');
-    }
-
-    stun() {
-        this.stunned = true;
-    }
-
-    unstun() {
-        this.stunned = false;
-    }
-
-    get warded() {
-        return this.hasToken('ward');
-    }
-
-    ward() {
-        if(!this.hasToken('ward')) {
-            this.addToken('ward');
-        }
-    }
-
-    unward() {
-        this.clearToken('ward');
-    }
-
     exhaust() {
         this.exhausted = true;
     }
@@ -653,20 +506,16 @@ class Card extends EffectSource {
         });
     }
 
-    canPlayAsUpgrade() {
-        return this.anyEffect('canPlayAsUpgrade') || this.type === 'upgrade';
-    }
-
     /**
      * Checks whether the passed card meets the upgrade restrictions (e.g.
      * Opponent cards only, specific factions, etc) for this card.
      */
     canAttach(card, context) { // eslint-disable-line no-unused-vars
-        return card && card.getType() === 'unit' && this.canPlayAsUpgrade();
+        return card && card.getType() === 'unit';
     }
 
     use(player, ignoreHouse = false) {
-        let legalActions = this.getLegalActions(player, ignoreHouse);
+        let legalActions = this.getLegalActions(player);
 
         if(legalActions.length === 0) {
             return false;
@@ -702,12 +551,11 @@ class Card extends EffectSource {
         return true;
     }
 
-    getLegalActions(player, ignoreHouse = false) {
+    getLegalActions(player) {
         let actions = this.getActions();
         actions = actions.filter(action => {
             let context = action.createContext(player);
-            context.ignoreHouse = ignoreHouse;
-            return !action.meetsRequirements(context);
+            return !action.meetsRequirements(context)
         });
         let canFight = actions.findIndex(action => action.title === 'Fight with this unit') >= 0;
         if(this.getEffects('mustFightIfAble').length > 0 && canFight) {
@@ -715,6 +563,20 @@ class Card extends EffectSource {
         }
 
         return actions;
+    }
+
+    getAttackAction() {
+        return this.action({
+            title: 'Attack with this unit',
+            condition: context => this.checkRestrictions('attack', context) && this.type === 'unit',
+            printedAbility: false,
+            target: {
+                activePromptTitle: 'Choose a unit to attack',
+                cardType: ['unit', 'player'],
+                controller: 'opponent',
+                gameAction: new ResolveAttackAction({ attacker: this })
+            }
+        });
     }
 
     getFightAction() {
@@ -749,14 +611,10 @@ class Card extends EffectSource {
         if(location === 'hand') {
             if(this.type === 'unit') {
                 actions.push(new PlayCreatureAction(this));
-            } else if(this.type === 'artifact') {
-                actions.push(new PlayArtifactAction(this));
-            } else if(this.type === 'action') {
-                actions.push(new PlayAction(this));
-            }
-
-            if(this.canPlayAsUpgrade()) {
-                actions.push(new PlayUpgradeAction(this));
+            } else if(this.type === 'relic') {
+                actions.push(new PlayRelicAction(this));
+            } else if(this.type === 'spell') {
+                actions.push(new PlaySpell(this));
             }
 
             actions.push(new DiscardAction(this));
@@ -780,59 +638,6 @@ class Card extends EffectSource {
         }
 
         return this.owner;
-    }
-
-    isOnFlank(flank) {
-        if(this.type !== 'unit') {
-            return false;
-        }
-
-        let position = this.controller.creaturesInPlay.indexOf(this);
-        if(flank === 'left') {
-            return (this.anyEffect('consideredAsFlank') || this.neighbors.length < 2) &&
-                position === 0;
-        } else if(flank === 'right') {
-            return (this.anyEffect('consideredAsFlank') || this.neighbors.length < 2) &&
-                position === this.controller.creaturesInPlay.length - 1;
-        }
-
-        return this.anyEffect('consideredAsFlank') || this.neighbors.length < 2;
-    }
-
-    isInCenter() {
-        let creatures = this.controller.creaturesInPlay;
-        if(creatures.length % 2 === 0) {
-            return false;
-        }
-
-        let mid = Math.floor(creatures.length / 2);
-        let centerCreature = creatures[mid];
-
-        return (this === centerCreature);
-    }
-
-    get neighbors() {
-        if(this.type !== 'unit') {
-            return [];
-        } else if(this.clonedNeighbors) {
-            return this.clonedNeighbors;
-        }
-
-        let creatures = this.controller.creaturesInPlay;
-        let index = creatures.indexOf(this);
-        let neighbors = [];
-
-        if(index < 0) {
-            return neighbors;
-        } else if(index > 0) {
-            neighbors.push(creatures[index - 1]);
-        }
-
-        if(index < creatures.length - 1) {
-            neighbors.push(creatures[index + 1]);
-        }
-
-        return neighbors;
     }
 
     ignores(trait) {
@@ -867,8 +672,8 @@ class Card extends EffectSource {
         let state = {
             id: this.cardData.id,
             image: this.cardData.image,
-            canPlay: (activePlayer === this.game.activePlayer) && this.game.activePlayer.activeHouse &&
-                isController && (this.getLegalActions(activePlayer, false).length > 0),
+            canPlay: (activePlayer === this.game.activePlayer) && isController &&
+                (this.getLegalActions(activePlayer, false).length > 0),
             cardback: './img/cards/cardback.png',
             childCards: this.childCards.map(card => {
                 return card.getSummary(activePlayer, hideWhenFaceup);

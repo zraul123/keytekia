@@ -48,26 +48,11 @@ const Costs = {
                 return false;
             } else if(context.game.cardsUsed.concat(context.game.cardsPlayed).filter(card => card.name === context.source.name).length >= 6) {
                 return false;
-            } else if(context.source.hasHouse(context.player.activeHouse) && !context.player.anyEffect('noActiveHouseForPlay')) {
-                return true;
-            } else if(context.ignoreHouse || context.player.getEffects('canPlay').some(match => match(context.source, context))) {
-                return true;
             }
 
-            let effects = context.player.effects.filter(effect => (HousePlayEffects.includes(effect.type) || NonHousePlayEffects.includes(effect.type)) &&
-                !context.game.effectsUsed.includes(effect));
+            // todo: add mana costs here
 
-            return effects.some(effect => {
-                let value = effect.getValue(context.player);
-                if(value.condition && !value.condition(context.source)) {
-                    return false;
-                } else if(value.house) {
-                    value = value.house;
-                }
-
-                return (HousePlayEffects.includes(effect.type) && context.source.hasHouse(value)) ||
-                    (NonHousePlayEffects.includes(effect.type) && !context.source.hasHouse(value));
-            });
+            return true;
         },
         payEvent: context => context.game.getEvent('unnamedEvent', {}, () => {
             context.game.cardsPlayed.push(context.source);
@@ -99,18 +84,6 @@ const Costs = {
 
             return false;
         })
-    }),
-    payAmber: (amount = 1) => ({
-        canPay: context => context.player.amber >= amount,
-        payEvent: context => {
-            let action = context.game.actions.transferAmber({ amount: amount });
-            action.name = 'pay';
-            return action.getEvent(context.player, context);
-        }
-    }),
-    loseAmber: (amount = 1) => ({
-        canPay: context => context.player.amber >= amount,
-        payEvent: context => context.game.actions.loseAmber({ amount: amount }).getEvent(context.player, context)
     })
 };
 

@@ -9,7 +9,7 @@ class PutIntoPlayAction extends CardGameAction {
 
     setup() {
         this.name = 'putIntoPlay';
-        this.targetType = ['creature', 'artifact'];
+        this.targetType = ['unit', 'relic'];
         this.effectMsg = 'put {0} into play';
     }
 
