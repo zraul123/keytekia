@@ -469,9 +469,8 @@ class Player extends GameObject {
             ],
             'type': 'player',
             'rarity': 'Rare',
-            'amber': 0,
-            'armor': 0,
-            'power': 0,
+            'armor': null,
+            'power': null,
             'text': 'Player',
             'locale': {
                 'de': {
@@ -558,7 +557,7 @@ class Player extends GameObject {
     getStats() {
         return {
             health: this.health,
-            mana: this.mana,
+            mana: this.mana
         };
     }
 
