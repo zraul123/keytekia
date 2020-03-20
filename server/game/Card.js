@@ -16,8 +16,8 @@ const RemoveStun = require('./BaseActions/RemoveStun');
 
 const locationActions = {
     'unit': PlayCreatureAction,
-    'artifact': PlayArtifactAction,
-    'action': PlayAction
+    'relic': PlayRelicAction,
+    'spell': PlaySpell
 }
 
 const actionTypes = {
@@ -571,12 +571,8 @@ class Card extends EffectSource {
             }
             let action = actionDescriptor.action;
             let context = action.createContext(player);
-<<<<<<< HEAD
             context.ignoreHouse = ignoreHouse;
             return !action.meetsRequirements(context) && this.controller.hasEnoughMana(actionDescriptor.mana);
-=======
-            return !action.meetsRequirements(context);
->>>>>>> 325ba58c3d45a4279ba5483aca62c1942c5ff611
         });
         let canFight = actions.findIndex(action => action.title === 'Fight with this unit') >= 0;
         if(this.getEffects('mustFightIfAble').length > 0 && canFight) {
@@ -633,12 +629,6 @@ class Card extends EffectSource {
             if (this.type in locationActions) {
                 actions.push(
                     this.convertActionType(actionTypes['playcard'], new locationActions[this.type](this),this.mana)
-                    )
-            }
-
-            if(this.canPlayAsUpgrade()) {
-                actions.push(
-                    this.convertActionType(actionTypes['playcard'], new PlayUpgradeAction(this), this.mana)
                     )
             }
 
