@@ -60,7 +60,7 @@ class Player extends GameObject {
     }
 
     playIfEnoughMana(mana) {
-        if (this.hasEnoughMana(mana)) {
+        if(this.hasEnoughMana(mana)) {
             this.mana = this.mana - mana;
             return true;
         }

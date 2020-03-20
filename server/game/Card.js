@@ -108,7 +108,7 @@ class Card extends EffectSource {
         let actions = this.abilities.actions;
         if(this.anyEffect('copyCard')) {
             let mostRecentEffect = _.last(this.effects.filter(effect => effect.type === 'copyCard'));
-            actions = mostRecentEffect.value.getActions(this)
+            actions = mostRecentEffect.value.getActions(this);
         }
 
         let effectActions = this.getEffects('gainAbility').filter(ability => ability.abilityType === 'action');
@@ -614,11 +614,11 @@ class Card extends EffectSource {
     getActions(location = this.location) {
         let actions = [];
         if(location === 'hand') {
-            if (this.type === 'unit') {
+            if(this.type === 'unit') {
                 actions.push(new PlayCreatureAction(this));
-            } else if (this.type === 'relic') {
+            } else if(this.type === 'relic') {
                 actions.push(new PlayRelicAction(this));
-            } else if (this.type === 'spell') {
+            } else if(this.type === 'spell') {
                 actions.push(new PlaySpell(this));
             }
 
@@ -633,7 +633,7 @@ class Card extends EffectSource {
     }
 
     convertActionType(type, action, manaRequired = 0) {
-        if (!type || !action) {
+        if(!type || !action) {
             type = actionTypes['default'];
             action = {};
         }
