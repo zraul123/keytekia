@@ -1,9 +1,9 @@
 const BasePlayAction = require('./BasePlayAction');
 
-class PlayAction extends BasePlayAction {
+class PlayRelic extends BasePlayAction {
     constructor(card) {
         super(card);
-        this.title = 'Play this artifact';
+        this.title = 'Play this relic';
     }
 
     executeHandler(context) {
@@ -16,5 +16,5 @@ class PlayAction extends BasePlayAction {
     }
 }
 
-module.exports = PlayAction;
+module.exports = PlayRelic;
 

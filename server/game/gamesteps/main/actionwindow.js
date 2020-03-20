@@ -66,7 +66,7 @@ class ActionWindow extends UiPrompt {
         ];
 
         return {
-            menuTitle: 'Choose a card to play, discard or use',
+            menuTitle: 'Choose a card to play or use',
             buttons: buttons,
             promptTitle: 'Play phase'
         };

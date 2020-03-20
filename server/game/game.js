@@ -12,10 +12,7 @@ const AnonymousSpectator = require('./anonymousspectator');
 const GamePipeline = require('./gamepipeline');
 const SetupPhase = require('./gamesteps/setup/setupphase');
 const SupplyPhase = require('./gamesteps/supply/supplyPhase');
-const HousePhase = require('./gamesteps/house/HousePhase');
 const MainPhase = require('./gamesteps/main/MainPhase');
-const ReadyPhase = require('./gamesteps/ReadyPhase');
-const DrawPhase = require('./gamesteps/draw/drawphase');
 const CleanupPhase = require('./gamesteps/cleanup/cleanupPhase');
 const SimpleStep = require('./gamesteps/simplestep');
 const MenuPrompt = require('./gamesteps/menuprompt');
@@ -972,10 +969,6 @@ class Game extends EventEmitter {
     }
 
     endRound() {
-        if(this.activePlayer.canForgeKey()) {
-            this.addAlert('success', '{0} declares Check!', this.activePlayer);
-        }
-
         this.activePlayer.endRound();
         this.cardsUsed = [];
         this.cardsPlayed = [];
@@ -986,13 +979,9 @@ class Game extends EventEmitter {
             card.endRound();
         }
 
-        this.activePlayer.activeHouse = null;
-
         if(this.activePlayer.opponent) {
             this.activePlayer = this.activePlayer.opponent;
         }
-
-        let playerResources = this.getPlayers().map(player => `${player.name}: ${player.amber} amber (${this.playerKeys(player)})`).join(' ');
 
         this.addAlert('endofround', `End of turn ${this.round}`);
 
@@ -1000,14 +989,8 @@ class Game extends EventEmitter {
             this.round++;
         }
 
-        this.addMessage(playerResources);
         this.addAlert('startofround', `Turn ${this.round}`);
         this.checkForTimeExpired();
-    }
-
-    playerKeys(player) {
-        const length = Object.values(player.keys).filter(forged => forged).length;
-        return length === 1 ? '1 key' : `${length} keys`;
     }
 
     get cardsInPlay() {
