@@ -547,7 +547,7 @@ class Player extends GameObject {
     }
 
     get maxHandSize() {
-        return 6 + this.sumEffects('modifyHandSize');
+        return 5 + this.sumEffects('modifyHandSize');
     }
 
     getAdditionalCosts(context) {
@@ -573,7 +573,7 @@ class Player extends GameObject {
             cardPiles: {
                 cardsInPlay: this.getSummaryForCardList(this.cardsInPlay, activePlayer),
                 discard: this.getSummaryForCardList(this.discard, activePlayer),
-                hand: this.getSummaryForCardList(this.hand, activePlayer, true),
+                hand: this.getSummaryForCardList(this.hand, activePlayer, true)
             },
             cardback: './img/cards/cardback.png',
             deckName: this.deckData.name,
@@ -597,11 +597,7 @@ class Player extends GameObject {
         if(isActivePlayer) {
             let sortedDeck = this.deck.slice();
             sortedDeck.sort((a, b) => {
-                if(a.printedHouse < b.printedHouse) {
-                    return -1;
-                } else if(a.printedHouse > b.printedHouse) {
-                    return 1;
-                } else if(a.id < b.id) {
+                if(a.id < b.id) {
                     return -1;
                 } else if(a.id > b.id) {
                     return 1;
