@@ -1,9 +1,7 @@
 export function loadCards() {
     return {
         types: ['REQUEST_CARDS', 'RECEIVE_CARDS'],
-        shouldCallAPI: (state) => {
-            return !state.cards.cards;
-        },
+        shouldCallAPI: () => true,
         APIParams: { url: '/api/cards', cache: false }
     };
 }

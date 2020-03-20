@@ -55,6 +55,19 @@ class Player extends GameObject {
         return 'player';
     }
 
+    hasEnoughMana(mana) {
+        return this.mana >= mana;
+    }
+
+    playIfEnoughMana(mana) {
+        if (this.hasEnoughMana(mana)) {
+            this.mana = this.mana - mana;
+            return true;
+        }
+
+        return false;
+    }
+
     isSpectator() {
         return false;
     }
