@@ -3,8 +3,9 @@ const CardGameAction = require('./CardGameAction');
 class FightGameAction extends CardGameAction {
     setup() {
         this.name = 'fight';
-        this.targetType = ['creature', 'player'];
+        this.targetType = ['unit', 'player'];
         this.effectMsg = 'fight with {0}';
+        this.manaCost = 0;
     }
 
     canAffect(card, context) {

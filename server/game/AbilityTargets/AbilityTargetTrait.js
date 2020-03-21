@@ -53,7 +53,7 @@ class AbilityTargetTrait {
     }
 
     resolve(context, targetResults) {
-        if(targetResults.cancelled || targetResults.payCostsFirst || targetResults.delayTargeting) {
+        if(targetResults.cancelled || targetResults.delayTargeting) {
             return;
         }
 

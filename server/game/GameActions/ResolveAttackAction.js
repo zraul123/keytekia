@@ -2,7 +2,7 @@ const CardGameAction = require('./CardGameAction');
 
 class ResolveAttackAction extends CardGameAction {
     setup() {
-        this.targetType = ['creature', 'player'];
+        this.targetType = ['unit', 'player'];
         this.effectMsg = '{1} attacks {0}';
         this.effectArgs = this.attacker;
     }
@@ -78,7 +78,6 @@ class ResolveAttackAction extends CardGameAction {
             event.addSubEvent(damageEvents);
             event.card.elusiveUsed = true;
             context.player.creatureFought = true;
-            event.attacker.unenrage();
         });
     }
 }

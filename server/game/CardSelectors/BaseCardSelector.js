@@ -58,7 +58,7 @@ class BaseCardSelector {
             possibleCards = this.location.reduce((array, location) => {
                 let cards = context.player.opponent.getSourceList(location);
                 if(location === 'play area') {
-                    return array.concat(cards, upgrades.filter(card => card.controller === context.player.opponent));
+                    return cards;
                 }
 
                 return array.concat(cards);

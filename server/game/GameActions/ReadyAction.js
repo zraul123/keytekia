@@ -3,7 +3,7 @@ const CardGameAction = require('./CardGameAction');
 class ReadyAction extends CardGameAction {
     setup() {
         this.name = 'ready';
-        this.targetType = ['creature', 'artifact'];
+        this.targetType = ['unit'];
         this.effectMsg = 'ready {0}';
     }
 

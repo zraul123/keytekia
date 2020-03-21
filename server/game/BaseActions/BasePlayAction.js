@@ -1,10 +1,9 @@
 const AbilityContext = require('../AbilityContext');
 const BaseAbility = require('../baseability.js');
-const Costs = require('../costs.js');
 
 class BasePlayAction extends BaseAbility {
     constructor(card, target) {
-        let properties = { cost: Costs.play() };
+        let properties = {};
         if(target) {
             properties.target = target;
         }

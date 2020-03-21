@@ -20,9 +20,6 @@ class BaseAbility {
      * Creates an ability.
      *
      * @param {Object} properties - An object with ability related properties.
-     * @param {Object|Array} [properties.cost] - optional property that specifies
-     * the cost for the ability. Can either be a cost object or an array of cost
-     * objects.
      * @param {Object} [properties.target] - optional property that specifies
      * the target of the ability.
      * @param {Array} [properties.gameAction] - optional array of game actions
@@ -36,20 +33,7 @@ class BaseAbility {
         }
 
         this.buildTargets(properties);
-        this.cost = this.buildCost(properties.cost);
         this.nonDependentTargets = this.targets.filter(target => !target.properties.dependsOn);
-    }
-
-    buildCost(cost) {
-        if(!cost) {
-            return [];
-        }
-
-        if(!Array.isArray(cost)) {
-            return [cost];
-        }
-
-        return cost;
     }
 
     buildTargets(properties) {
@@ -93,7 +77,6 @@ class BaseAbility {
      */
     meetsRequirements(context) {
         // check legal targets exist
-        // check costs can be paid
         // check for potential to change game state
         for(let target of this.targets) {
             target.resetGameActions();
@@ -103,9 +86,7 @@ class BaseAbility {
             action.reset();
         }
 
-        if(!this.canPayCosts(context)) {
-            return 'cost';
-        } else if(this.checkThenAbilities() || this.printedAbility && this.abilityType === 'action') {
+        if(this.checkThenAbilities() || this.printedAbility && this.abilityType === 'action') {
             return '';
         } else if(this.gameAction.length > 0 && this.gameAction.some(gameAction => gameAction.hasLegalTarget(context))) {
             return '';
@@ -118,24 +99,6 @@ class BaseAbility {
 
     checkThenAbilities() {
         return false;
-    }
-
-    /**
-     * Return whether all costs are capable of being paid for the ability.
-     *
-     * @returns {Boolean}
-     */
-    canPayCosts(context) {
-        let cost = this.cost.concat(context.player.getAdditionalCosts(context));
-        return cost.every(cost => cost.canPay(context));
-    }
-
-    /**
-     * Pays all costs for the ability simultaneously.
-     */
-    payCosts(context) {
-        let cost = this.cost.concat(context.player.getAdditionalCosts(context));
-        return cost.map(cost => cost.payEvent(context));
     }
 
     /**
@@ -153,7 +116,6 @@ class BaseAbility {
     resolveTargets(context) {
         let targetResults = {
             cancelled: false,
-            payCostsFirst: false,
             delayTargeting: null
         };
         for(let target of this.targets) {

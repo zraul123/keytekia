@@ -28,7 +28,6 @@ class GameAction {
         this.name = '';
         this.targetType = [];
         this.effectMsg = '';
-        this.cost = '';
     }
 
     update(context) {

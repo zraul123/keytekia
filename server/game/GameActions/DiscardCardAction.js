@@ -5,7 +5,6 @@ class DiscardCardAction extends CardGameAction {
         super.setup();
         this.name = 'discard';
         this.effectMsg = 'discard {0}';
-        this.cost = 'discarding {0}';
     }
 
     getEvent(card, context) {

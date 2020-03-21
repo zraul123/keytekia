@@ -17,8 +17,6 @@ const TriggeredAbilityContext = require('./TriggeredAbilityContext.js');
  *           Multiple events may be specified for cards that have multiple
  *           possible triggers for the same reaction.
  * title   - string which is displayed to the player to reference this ability
- * cost    - object or array of objects representing the cost required to be
- *           paid before the action will activate. See Costs.
  * target  - object giving properties for the target API
  * handler - function that will be executed if the player chooses 'Yes' when
  *           asked to trigger the reaction. If the reaction has more than one

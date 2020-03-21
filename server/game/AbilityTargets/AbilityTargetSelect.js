@@ -12,7 +12,6 @@ class AbilityTargetSelect {
         }
 
         this.dependentTarget = null;
-        this.dependentCost = null;
         if(this.properties.dependsOn) {
             let dependsOnTarget = ability.targets.find(target => target.name === this.properties.dependsOn);
             dependsOnTarget.dependentTarget = this;
@@ -41,7 +40,7 @@ class AbilityTargetSelect {
             contextCopy.select = key;
         }
 
-        if(context.stage === 'pretarget' && this.dependentCost && !this.dependentCost.canPay(contextCopy)) {
+        if(context.stage === 'pretarget') {
             return false;
         }
 
@@ -75,7 +74,7 @@ class AbilityTargetSelect {
     }
 
     resolve(context, targetResults) {
-        if(targetResults.cancelled || targetResults.payCostsFirst || targetResults.delayTargeting) {
+        if(targetResults.cancelled || targetResults.delayTargeting) {
             return;
         }
 
@@ -102,11 +101,6 @@ class AbilityTargetSelect {
             });
         });
         if(this.properties.player !== 'opponent' && context.stage === 'pretarget') {
-            if(!targetResults.noCostsFirstButton) {
-                choices.push('Pay costs first');
-                handlers.push(() => targetResults.payCostsFirst = true);
-            }
-
             choices.push('Cancel');
             handlers.push(() => targetResults.cancelled = true);
         }

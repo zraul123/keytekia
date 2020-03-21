@@ -14,6 +14,7 @@ const SetupPhase = require('./gamesteps/setup/setupphase');
 const SupplyPhase = require('./gamesteps/supply/supplyPhase');
 const MainPhase = require('./gamesteps/main/MainPhase');
 const CleanupPhase = require('./gamesteps/cleanup/cleanupPhase');
+const ReadyPhase = require('./gamesteps/ReadyPhase');
 const SimpleStep = require('./gamesteps/simplestep');
 const MenuPrompt = require('./gamesteps/menuprompt');
 const HandlerMenuPrompt = require('./gamesteps/handlermenuprompt');
@@ -643,6 +644,7 @@ class Game extends EventEmitter {
     beginRound() {
         this.raiseEvent('onBeginRound');
         this.activePlayer.beginRound();
+        this.queueStep(new ReadyPhase(this));
         this.queueStep(new SupplyPhase(this));
         this.queueStep(new MainPhase(this));
         this.queueStep(new CleanupPhase(this));
@@ -998,7 +1000,7 @@ class Game extends EventEmitter {
     }
 
     get creaturesInPlay() {
-        return this.cardsInPlay.filter(card => card.type === 'creature');
+        return this.cardsInPlay.filter(card => card.type === 'unit');
     }
 
     /**

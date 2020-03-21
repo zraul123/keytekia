@@ -14,18 +14,6 @@ const ResolveAttackAction = require('./GameActions/ResolveAttackAction');
 const ResolveReapAction = require('./GameActions/ResolveReapAction');
 const RemoveStun = require('./BaseActions/RemoveStun');
 
-const locationActions = {
-    'unit': PlayCreatureAction,
-    'relic': PlayRelicAction,
-    'spell': PlaySpell
-}
-
-const actionTypes = {
-    'playcard': 'PLAY',
-    'usecard' : 'USE',
-    'default' : 'NONE'
-}
-
 class Card extends EffectSource {
     constructor(owner, cardData) {
         super(owner.game);
@@ -153,7 +141,7 @@ class Card extends EffectSource {
 
     /**
      * Create card abilities by calling subsequent methods with appropriate properties
-     * @param ability - object containing limits, costs, effects, and game actions
+     * @param ability - object containing limits, effects, and game actions
      */
     setupCardAbilities(ability) { // eslint-disable-line no-unused-vars
     }
@@ -625,24 +613,9 @@ class Card extends EffectSource {
             actions.push(new DiscardAction(this));
         } else if(location === 'play area' && this.type === 'unit') {
             actions.push(this.getFightAction());
-            actions.push(this.getReapAction());
-            actions.push(this.getRemoveStunAction());
         }
 
         return actions.concat(this.actions.slice());
-    }
-
-    convertActionType(type, action, manaRequired = 0) {
-        if(!type || !action) {
-            type = actionTypes['default'];
-            action = {};
-        }
-
-        return {
-            type: type,
-            action: action,
-            mana: manaRequired
-        };
     }
 
     setDefaultController(player) {
