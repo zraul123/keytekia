@@ -5,6 +5,7 @@ typings
 coverage
 *.log
 *.json
+!MaN.json
 server/events.txt
 .DS_Store
 config/local*
