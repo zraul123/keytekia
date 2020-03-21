@@ -1,5 +1,4 @@
 const CardAbility = require('./CardAbility.js');
-const Costs = require('./costs.js');
 
 /**
  * Represents an action ability provided by card text.
@@ -11,8 +10,6 @@ const Costs = require('./costs.js');
  *                allowed, false otherwise. It should generally be used to check
  *                if the action can modify game state (step #1 in ability
  *                resolution in the rules).
- * cost         - object or array of objects representing the cost required to
- *                be paid before the action will activate. See Costs.
  * phase        - string representing which phases the action may be executed.
  *                Defaults to 'any' which allows the action to be executed in
  *                any phase.
@@ -36,7 +33,7 @@ class CardAction extends CardAbility {
         this.title = properties.title || 'Use this card\'s ' + (properties.omni ? 'Omni' : 'Action') + ' ability';
         this.condition = properties.condition;
         this.omni = !!properties.omni;
-        this.cost = this.cost.concat(Costs.exhaust(), Costs.use());
+        this.manaCost = 0;
     }
 
     meetsRequirements(context = this.createContext(), ignoredRequirements = []) {
@@ -50,6 +47,8 @@ class CardAction extends CardAbility {
             return 'condition';
         } else if(!ignoredRequirements.includes('stunned') && this.card.stunned) {
             return 'stunned';
+        } else if (this.card.exhausted) {
+            return 'exhausted';
         }
 
         return super.meetsRequirements(context);

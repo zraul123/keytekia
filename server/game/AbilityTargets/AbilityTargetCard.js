@@ -12,7 +12,6 @@ class AbilityTargetCard {
 
         this.selector = this.getSelector(properties);
         this.dependentTarget = null;
-        this.dependentCost = null;
         if(this.properties.dependsOn) {
             let dependsOnTarget = ability.targets.find(target => target.name === this.properties.dependsOn);
             dependsOnTarget.dependentTarget = this;
@@ -58,7 +57,7 @@ class AbilityTargetCard {
     }
 
     resolve(context, targetResults) {
-        if(targetResults.cancelled || targetResults.payCostsFirst) {
+        if(targetResults.cancelled) {
             return;
         }
 
@@ -67,10 +66,6 @@ class AbilityTargetCard {
         let buttons = [];
         let waitingPromptTitle = '';
         if(context.stage === 'pretarget') {
-            if(!targetResults.noCostsFirstButton) {
-                buttons.push({ text: 'Pay costs first', arg: 'costsFirst' });
-            }
-
             buttons.push({ text: 'Cancel', arg: 'cancel' });
             if(context.ability.abilityType === 'action') {
                 waitingPromptTitle = 'Waiting for opponent to take an action or pass';
@@ -97,11 +92,6 @@ class AbilityTargetCard {
                 return true;
             },
             onMenuCommand: (player, arg) => {
-                if(arg === 'costsFirst') {
-                    targetResults.costsFirst = true;
-                    return true;
-                }
-
                 return true;
             }
         };

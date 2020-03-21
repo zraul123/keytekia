@@ -1,10 +1,9 @@
 const AbilityContext = require('../AbilityContext');
 const BaseAbility = require('../baseability.js');
-const Costs = require('../costs.js');
 
 class RemoveStun extends BaseAbility {
     constructor(card) {
-        super({ cost: [Costs.use(), Costs.exhaust()] });
+        super({});
         this.card = card;
         this.title = 'Remove this creature\'s stun';
         this.printedAbility = false;

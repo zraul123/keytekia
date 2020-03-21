@@ -1,9 +1,6 @@
 const CardGameAction = require('./CardGameAction');
 
 class UseAction extends CardGameAction {
-    setDefaultProperties() {
-        this.ignoreHouse = true;
-    }
 
     setup() {
         this.name = 'use';

@@ -10,7 +10,7 @@ const MostHouseCardSelector = require('./CardSelectors/MostHouseCardSelector');
 const defaultProperties = {
     numCards: 1,
     cardCondition: () => true,
-    cardType: ['action', 'artifact', 'creature', 'upgrade'],
+    cardType: ['relic', 'spell', 'unit'],
     multiSelect: false
 };
 

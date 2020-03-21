@@ -63,10 +63,6 @@ class DealDamageAction extends CardGameAction {
                 return;
             }
 
-            if (event.card.type === 'player') {
-                console.log("Deal damage to player");
-            }
-
             if(!event.ignoreArmor) {
                 const currentArmor = event.card.armor - event.card.armorUsed;
                 if(amount <= currentArmor) {

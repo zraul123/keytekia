@@ -14,18 +14,6 @@ const ResolveAttackAction = require('./GameActions/ResolveAttackAction');
 const ResolveReapAction = require('./GameActions/ResolveReapAction');
 const RemoveStun = require('./BaseActions/RemoveStun');
 
-const locationActions = {
-    'unit': PlayCreatureAction,
-    'relic': PlayRelicAction,
-    'spell': PlaySpell
-}
-
-const actionTypes = {
-    'playcard': 'PLAY',
-    'usecard' : 'USE',
-    'default' : 'NONE'
-}
-
 class Card extends EffectSource {
     constructor(owner, cardData) {
         super(owner.game);
@@ -84,6 +72,7 @@ class Card extends EffectSource {
 
         this.menu = [
             { command: 'attack', text: 'Exhaust/Ready' },
+            { command: 'stun', text: 'Stun/Remove Stun' },
             { command: 'control', text: 'Give control' }
         ];
 
@@ -152,7 +141,7 @@ class Card extends EffectSource {
 
     /**
      * Create card abilities by calling subsequent methods with appropriate properties
-     * @param ability - object containing limits, costs, effects, and game actions
+     * @param ability - object containing limits, effects, and game actions
      */
     setupCardAbilities(ability) { // eslint-disable-line no-unused-vars
     }
@@ -233,10 +222,11 @@ class Card extends EffectSource {
     }
 
     reaction(properties) {
-        if(properties.play || properties.attack) {
+        if(properties.play || properties.fight || properties.reap) {
             properties.when = {
                 onCardPlayed: (event, context) => event.card === context.source,
-                onAttack: (event, context) => event.attacker === context.source
+                onFight: (event, context) => event.attacker === context.source,
+                onReap: (event, context) => event.card === context.source
             };
         }
 
@@ -494,7 +484,6 @@ class Card extends EffectSource {
 
     ready() {
         this.exhausted = false;
-        this.resting = false;
     }
 
     removeAttachment(card) {
@@ -561,9 +550,9 @@ class Card extends EffectSource {
             let context = action.createContext(player);
             return !action.meetsRequirements(context) && this.controller.hasEnoughMana(action.manaCost);
         });
-        let canFight = actions.findIndex(action => action.title === 'Attack with this unit') >= 0;
+        let canFight = actions.findIndex(action => action.title === 'Fight with this unit') >= 0;
         if(this.getEffects('mustFightIfAble').length > 0 && canFight) {
-            actions = actions.filter(action => action.title === 'Attack with this unit');
+            actions = actions.filter(action => action.title === 'Fight with this unit');
         }
 
         return actions;
@@ -597,6 +586,19 @@ class Card extends EffectSource {
         });
     }
 
+    getReapAction() {
+        return this.action({
+            title: 'Reap with this unit',
+            condition: context => this.checkRestrictions('reap', context) && this.type === 'unit',
+            printedAbility: false,
+            gameAction: new ResolveReapAction()
+        });
+    }
+
+    getRemoveStunAction() {
+        return new RemoveStun(this);
+    }
+
     getActions(location = this.location) {
         let actions = [];
         if(location === 'hand') {
@@ -610,23 +612,10 @@ class Card extends EffectSource {
 
             actions.push(new DiscardAction(this));
         } else if(location === 'play area' && this.type === 'unit') {
-            actions.push(this.getAttackAction());
+            actions.push(this.getFightAction());
         }
 
         return actions.concat(this.actions.slice());
-    }
-
-    convertActionType(type, action, manaRequired = 0) {
-        if(!type || !action) {
-            type = actionTypes['default'];
-            action = {};
-        }
-
-        return {
-            type: type,
-            action: action,
-            mana: manaRequired
-        };
     }
 
     setDefaultController(player) {

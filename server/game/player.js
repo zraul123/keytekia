@@ -565,10 +565,6 @@ class Player extends GameObject {
         return 5 + this.sumEffects('modifyHandSize');
     }
 
-    getAdditionalCosts(context) {
-        return this.getEffects('additionalCost').reduce((array, costFactory) => array.concat(costFactory(context)), []).filter(cost => !!cost);
-    }
-
     getStats() {
         return {
             health: this.health,

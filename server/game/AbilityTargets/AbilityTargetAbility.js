@@ -6,7 +6,6 @@ class AbilityTargetAbility {
         this.properties = properties;
         this.selector = this.getSelector(properties);
         this.dependentTarget = null;
-        this.dependentCost = null;
         if(this.properties.dependsOn) {
             let dependsOnTarget = ability.targets.find(target => target.name === this.properties.dependsOn);
             dependsOnTarget.dependentTarget = this;
@@ -19,7 +18,7 @@ class AbilityTargetAbility {
             return abilities.some(ability => {
                 let contextCopy = context.copy();
                 contextCopy.targetAbility = ability;
-                if(context.stage === 'pretarget' && this.dependentCost && !this.dependentCost.canPay(contextCopy)) {
+                if(context.stage === 'pretarget') {
                     return false;
                 }
 
@@ -55,7 +54,7 @@ class AbilityTargetAbility {
     }
 
     resolve(context, targetResults) {
-        if(targetResults.cancelled || targetResults.payCostsFirst || targetResults.delayTargeting) {
+        if(targetResults.cancelled || targetResults.delayTargeting) {
             return;
         }
 
@@ -85,11 +84,6 @@ class AbilityTargetAbility {
                 return true;
             },
             onMenuCommand: (player, arg) => {
-                if(arg === 'costsFirst') {
-                    targetResults.costsFirst = true;
-                    return true;
-                }
-
                 return true;
             }
         };

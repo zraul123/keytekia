@@ -47,7 +47,6 @@ const Effects = {
     }),
     transferDamage: (card) => EffectBuilder.card.static('transferDamage', card),
     // Player effects
-    additionalCost: (costFactory) => EffectBuilder.player.static('additionalCost', costFactory),
     canFight: (match) => EffectBuilder.player.static('canUse', context => (
         (context.ability.title === 'Fight with this creature' ||
             context.ability.title === 'Remove this creature\'s stun') &&
@@ -74,7 +73,6 @@ const Effects = {
         unapply: (player, context, effect) => context.game.effectEngine.removeDelayedEffect(effect)
     }),
     forgeAmberGainedByOpponent: () => EffectBuilder.player.static('forgeAmberGainedByOpponent'),
-    modifyKeyCost: (amount) => EffectBuilder.player.flexible('modifyKeyCost', amount),
     modifyHandSize: (amount) => EffectBuilder.player.flexible('modifyHandSize', amount),
     noActiveHouseForPlay: () => EffectBuilder.player.static('noActiveHouseForPlay'),
     playerCannot: (type, condition) => EffectBuilder.player.static('abilityRestrictions', new CannotRestriction(type, condition)),

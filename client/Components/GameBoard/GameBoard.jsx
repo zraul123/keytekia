@@ -200,7 +200,6 @@ export class GameBoard extends React.Component {
 
     onCardClick(card) {
         this.props.sendGameMessage('cardClicked', card.uuid);
-        console.log(this.props.sendGameMessage);
     }
 
     handleDrawPopupChange(event) {
