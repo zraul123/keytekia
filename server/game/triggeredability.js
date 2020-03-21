@@ -80,7 +80,7 @@ class TriggeredAbility extends CardAbility {
             return false;
         } else if(!this.when[event.name] || !this.when[event.name](event, context)) {
             return false;
-        } else if(this.properties.play || this.properties.fight || this.properties.reap) {
+        } else if(this.properties.play || this.properties.attack) {
             let { play, fight, reap } = this.properties;
             reap = reap || (play && this.card.anyEffect('playAbilitiesAddReap'));
             fight = fight || (reap && this.card.anyEffect('reapAbilitiesAddFight'));

@@ -1,8 +1,3 @@
-const HouseUseEffects = ['canUseHouse', 'canPlayOrUseHouse'];
-const NonHouseUseEffects = ['canPlayOrUseNonHouse'];
-const HousePlayEffects = ['canPlayHouse', 'canPlayOrUseHouse'];
-const NonHousePlayEffects = ['canPlayNonHouse', 'canPlayOrUseNonHouse'];
-
 const Costs = {
     exhaust: () => ({
         canPay: context => !context.source.exhausted,
@@ -12,34 +7,15 @@ const Costs = {
         canPay: context => {
             if(context.game.cardsUsed.concat(context.game.cardsPlayed).filter(card => card.name === context.source.name).length >= 6) {
                 return false;
-            } else if(context.source.hasHouse(context.player.activeHouse) || context.ability.omni) {
-                return true;
-            } else if(context.ignoreHouse || context.player.getEffects('canUse').some(match => match(context))) {
+            } else if(context.player.getEffects('canUse').some(match => match(context))) {
                 return true;
             }
 
-            return context.player.effects.some(effect => ((HouseUseEffects.includes(effect.type) && context.source.hasHouse(effect.getValue(context.player))) ||
-                (NonHouseUseEffects.includes(effect.type) && !context.source.hasHouse(effect.getValue(context.player)))) && !context.game.effectsUsed.includes(effect));
+            return true;
         },
         payEvent: context => context.game.getEvent('unnamedEvent', {}, () => {
             context.game.cardsUsed.push(context.source);
-            if(context.ignoreHouse || context.player.getEffects('canUse').some(match => match(context))) {
-                return true;
-            } else if(context.source.hasHouse(context.player.activeHouse)) {
-                return true;
-            }
-
-            let houseEffects = (context.player.effects.filter(effect => (HouseUseEffects.includes(effect.type) || NonHouseUseEffects.includes(effect.type)) &&
-                !context.game.effectsUsed.includes(effect)));
-            let effect = houseEffects.find(effect => (HouseUseEffects.includes(effect.type) && context.source.hasHouse(effect.getValue(context.player))) ||
-                (NonHouseUseEffects.includes(effect.type) && !context.source.hasHouse(effect.getValue(context.player))));
-
-            if(effect) {
-                context.game.effectsUsed.push(effect);
-                return true;
-            }
-
-            return false;
+            return context.player.getEffects('canUse').some(match => match(context));
         })
     }),
     play: () => ({
@@ -50,39 +26,11 @@ const Costs = {
                 return false;
             }
 
-            // todo: add mana costs here
-
             return true;
         },
         payEvent: context => context.game.getEvent('unnamedEvent', {}, () => {
             context.game.cardsPlayed.push(context.source);
-            if(context.ignoreHouse || context.player.getEffects('canPlay').some(match => match(context.source, context))) {
-                return true;
-            } else if(context.source.hasHouse(context.player.activeHouse)) {
-                return true;
-            }
-
-            let effects = context.player.effects.filter(effect => (HousePlayEffects.includes(effect.type) || NonHousePlayEffects.includes(effect.type)) &&
-                !context.game.effectsUsed.includes(effect));
-
-            let effect = effects.find(effect => {
-                let value = effect.getValue(context.player);
-                if(value.condition && !value.condition(context.source)) {
-                    return false;
-                } else if(value.house) {
-                    value = value.house;
-                }
-
-                return (HousePlayEffects.includes(effect.type) && context.source.hasHouse(value)) ||
-                    (NonHousePlayEffects.includes(effect.type) && !context.source.hasHouse(value));
-            });
-
-            if(effect) {
-                context.game.effectsUsed.push(effect);
-                return true;
-            }
-
-            return false;
+            return context.player.getEffects('canPlay').some(match => match(context.source, context));
         })
     })
 };

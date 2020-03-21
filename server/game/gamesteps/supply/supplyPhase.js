@@ -6,7 +6,8 @@ class SupplyPhase extends Phase {
         super(game, 'supply');
         this.initialise([
             new SimpleStep(game, () => this.drawCards()),
-            new SimpleStep(game, () => this.refillMana())
+            new SimpleStep(game, () => this.refillMana()),
+            new SimpleStep(game, () => this.readyUnits())
 
         ]);
     }
@@ -17,6 +18,10 @@ class SupplyPhase extends Phase {
 
     drawCards() {
         this.game.actions.draw().resolve(this.game.activePlayer, this.game.getFrameworkContext());
+    }
+
+    readyUnits() {
+        this.game.actions.ready().resolve(this.game.activePlayer.cardsInPlay, this.game.getFrameworkContext());
     }
 }
 

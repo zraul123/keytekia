@@ -8,7 +8,7 @@ class PlaySpell extends BasePlayAction {
     }
 
     executeHandler(context) {
-        if (context.player.playIfEnoughMana(this.manaCost)) {
+        if(context.player.playIfEnoughMana(this.manaCost)) {
             let location = context.source.location;
             context.player.moveCard(context.source, 'being played');
             context.game.raiseEvent('onCardPlayed', {

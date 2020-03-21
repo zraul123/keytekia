@@ -373,11 +373,13 @@ class Player extends GameObject {
             card.onLeavesPlay();
             card.controller = this;
         } else if(targetLocation === 'play area') {
+            // card moves to the play area
             if(options.myControl) {
                 card.setDefaultController(this);
             }
 
-            card.exhausted = true;
+            // card is resting but not exhausted
+            card.resting = true;
         } else if(card.owner !== this) {
             card.owner.moveCard(card, targetLocation, options);
             return;

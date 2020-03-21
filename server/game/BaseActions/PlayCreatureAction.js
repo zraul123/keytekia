@@ -8,7 +8,7 @@ class PlayUnitAction extends BasePlayAction {
     }
 
     executeHandler(context) {
-        if (context.player.playIfEnoughMana(this.manaCost)) {
+        if(context.player.playIfEnoughMana(this.manaCost)) {
             let cardPlayedEvent = context.game.getEvent('onCardPlayed', {
                 player: context.player,
                 card: context.source,

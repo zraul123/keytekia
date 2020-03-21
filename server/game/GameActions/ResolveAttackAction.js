@@ -2,7 +2,7 @@ const CardGameAction = require('./CardGameAction');
 
 class ResolveAttackAction extends CardGameAction {
     setup() {
-        this.targetType = ['creature', 'player'];
+        this.targetType = ['unit', 'player'];
         this.effectMsg = '{1} attacks {0}';
         this.effectArgs = this.attacker;
     }
@@ -10,9 +10,9 @@ class ResolveAttackAction extends CardGameAction {
     canAffect(card, context) {
         if(card.location !== 'play area' || !this.attacker) {
             return false;
-        } else if(!this.attacker.checkRestrictions('fight') || card.controller === this.attacker.controller) {
+        } else if(!this.attacker.checkRestrictions('attack') || card.controller === this.attacker.controller) {
             return false;
-        } else if(!card.checkRestrictions('attackDueToTaunt') && !this.attacker.ignores('taunt') && context.stage !== 'effect') {
+        } else if(!card.checkRestrictions('attackDueToTaunt') && !this.attacker.ignores('guardian') && context.stage !== 'effect') {
             return false;
         }
 
@@ -29,7 +29,7 @@ class ResolveAttackAction extends CardGameAction {
             defenderTarget: this.attacker,
             destroyed: []
         };
-        return super.createEvent('onFight', params, event => {
+        return super.createEvent('onAttack', params, event => {
             let damageEvents = [];
             let defenderAmount = event.card.power;
             if(event.card.anyEffect('limitFightDamage')) {
@@ -52,19 +52,11 @@ class ResolveAttackAction extends CardGameAction {
                 damageSource: event.attacker
             };
 
-            if (event.card.type === 'player') {
+            if(event.card.type === 'player') {
                 event.card.owner.health -= attackerParams.amount;
             }
 
-            if(!event.card.getKeywordValue('elusive') || event.card.elusiveUsed || event.attacker.ignores('elusive')) {
-                if((!event.attacker.getKeywordValue('skirmish') || event.defenderTarget !== event.attacker) && event.card.checkRestrictions('dealFightDamage') && event.attackerTarget.checkRestrictions('dealFightDamageWhenDefending')) {
-                    damageEvents.push(context.game.actions.dealDamage(defenderParams).getEvent(event.defenderTarget, context));
-                }
-
-                if(event.attacker.checkRestrictions('dealFightDamage')) {
-                    damageEvents.push(context.game.actions.dealDamage(attackerParams).getEvent(event.attackerTarget, context));
-                }
-            } else if(event.attackerTarget !== event.card && event.attacker.checkRestrictions('dealFightDamage')) {
+            if(event.attackerTarget !== event.card && event.attacker.checkRestrictions('dealAttackDamage')) {
                 damageEvents.push(context.game.actions.dealDamage(attackerParams).getEvent(event.attackerTarget, context));
             }
 
@@ -76,9 +68,7 @@ class ResolveAttackAction extends CardGameAction {
             event.attacker.isFighting = true;
             context.game.checkGameState(true);
             event.addSubEvent(damageEvents);
-            event.card.elusiveUsed = true;
             context.player.creatureFought = true;
-            event.attacker.unenrage();
         });
     }
 }

@@ -84,7 +84,6 @@ class Card extends EffectSource {
 
         this.menu = [
             { command: 'attack', text: 'Exhaust/Ready' },
-            { command: 'stun', text: 'Stun/Remove Stun' },
             { command: 'control', text: 'Give control' }
         ];
 
@@ -234,11 +233,10 @@ class Card extends EffectSource {
     }
 
     reaction(properties) {
-        if(properties.play || properties.fight || properties.reap) {
+        if(properties.play || properties.attack) {
             properties.when = {
                 onCardPlayed: (event, context) => event.card === context.source,
-                onFight: (event, context) => event.attacker === context.source,
-                onReap: (event, context) => event.card === context.source
+                onAttack: (event, context) => event.attacker === context.source
             };
         }
 
@@ -496,6 +494,7 @@ class Card extends EffectSource {
 
     ready() {
         this.exhausted = false;
+        this.resting = false;
     }
 
     removeAttachment(card) {
@@ -562,9 +561,9 @@ class Card extends EffectSource {
             let context = action.createContext(player);
             return !action.meetsRequirements(context) && this.controller.hasEnoughMana(action.manaCost);
         });
-        let canFight = actions.findIndex(action => action.title === 'Fight with this unit') >= 0;
+        let canFight = actions.findIndex(action => action.title === 'Attack with this unit') >= 0;
         if(this.getEffects('mustFightIfAble').length > 0 && canFight) {
-            actions = actions.filter(action => action.title === 'Fight with this unit');
+            actions = actions.filter(action => action.title === 'Attack with this unit');
         }
 
         return actions;
@@ -598,19 +597,6 @@ class Card extends EffectSource {
         });
     }
 
-    getReapAction() {
-        return this.action({
-            title: 'Reap with this unit',
-            condition: context => this.checkRestrictions('reap', context) && this.type === 'unit',
-            printedAbility: false,
-            gameAction: new ResolveReapAction()
-        });
-    }
-
-    getRemoveStunAction() {
-        return new RemoveStun(this);
-    }
-
     getActions(location = this.location) {
         let actions = [];
         if(location === 'hand') {
@@ -624,9 +610,7 @@ class Card extends EffectSource {
 
             actions.push(new DiscardAction(this));
         } else if(location === 'play area' && this.type === 'unit') {
-            actions.push(this.getFightAction());
-            actions.push(this.getReapAction());
-            actions.push(this.getRemoveStunAction());
+            actions.push(this.getAttackAction());
         }
 
         return actions.concat(this.actions.slice());

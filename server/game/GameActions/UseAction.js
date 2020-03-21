@@ -7,7 +7,7 @@ class UseAction extends CardGameAction {
 
     setup() {
         this.name = 'use';
-        this.targetType = ['creature', 'artifact'];
+        this.targetType = ['unit', 'relic'];
         this.effectMsg = 'use {0}';
     }
 
@@ -18,8 +18,8 @@ class UseAction extends CardGameAction {
 
 
     getEvent(card, context) {
-        return super.createEvent('onUseCard', { card: card, context: context, ignoreHouse: this.ignoreHouse }, event =>
-            card.use(context.player, event.ignoreHouse));
+        return super.createEvent('onUseCard', { card: card, context: context }, event =>
+            card.use(context.player));
     }
 }
 

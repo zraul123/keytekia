@@ -10,7 +10,7 @@ class ResolveFightAction extends CardGameAction {
     canAffect(card, context) {
         if(card.location !== 'play area' || !this.attacker) {
             return false;
-        } else if(!this.attacker.checkRestrictions('fight') || card.controller === this.attacker.controller) {
+        } else if(!this.attacker.checkRestrictions('attack') || card.controller === this.attacker.controller) {
             return false;
         } else if(!card.checkRestrictions('attackDueToTaunt') && !this.attacker.ignores('taunt') && context.stage !== 'effect') {
             return false;
