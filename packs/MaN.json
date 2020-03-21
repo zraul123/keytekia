@@ -19,7 +19,7 @@
       "type": "unit",
       "rarity": "Uncommon",
       "mana": 1,
-      "armor": null,
+      "health": null,
       "power": null,
       "text": "Destroyed: Draw 1 card.",
       "locale": {
@@ -67,7 +67,7 @@
       "type": "spell",
       "rarity": "Rare",
       "mana": 4,
-      "armor": null,
+      "health": null,
       "power": null,
       "text": "Deal 3 damage to all Units.",
       "locale": {
@@ -115,7 +115,7 @@
       "type": "unit",
       "rarity": "Rare",
       "mana": 1,
-      "armor": 2,
+      "health": 2,
       "power": 1,
       "text": "Whenever you play a Spell, Acolyte of Aggression gains +1/+0 until end of turn.",
       "locale": {
@@ -163,7 +163,7 @@
       "type": "unit",
       "rarity": "Common",
       "mana": 5,
-      "armor": 1,
+      "health": 1,
       "power": 1,
       "text": "Whenever you play a Spell, deal 1 damage to target Player.",
       "locale": {
@@ -211,7 +211,7 @@
       "type": "unit",
       "rarity": "Common",
       "mana": 2,
-      "armor": 1,
+      "health": 1,
       "power": 1,
       "text": "Attack: Draw 1 card, then discard 1 card.",
       "locale": {
@@ -259,7 +259,7 @@
       "type": "spell",
       "rarity": "Uncommon",
       "mana": 2,
-      "armor": null,
+      "health": null,
       "power": null,
       "text": "Draw 2 cards. Discard 2 cards.",
       "locale": {
@@ -307,7 +307,7 @@
       "type": "unit",
       "rarity": "Common",
       "mana": 3,
-      "armor": 1,
+      "health": 1,
       "power": 1,
       "text": "Attack: Deal 1 damage to target Unit.",
       "locale": {
@@ -355,7 +355,7 @@
       "type": "spell",
       "rarity": "Uncommon",
       "mana": 5,
-      "armor": null,
+      "health": null,
       "power": null,
       "text": "Deal 5 damage to target Unit.",
       "locale": {
@@ -403,7 +403,7 @@
       "type": "spell",
       "rarity": "Rare",
       "mana": 3,
-      "armor": null,
+      "health": null,
       "power": 0,
       "text": "Each player shuffles their hands into their decks and then draws 3 cards.",
       "locale": {
@@ -451,7 +451,7 @@
       "type": "spell",
       "rarity": "Common",
       "mana": 2,
-      "armor": null,
+      "health": null,
       "power": null,
       "text": "Each player draws 2 cards.",
       "locale": {
@@ -499,7 +499,7 @@
       "type": "spell",
       "rarity": "Uncommon",
       "mana": 2,
-      "armor": null,
+      "health": null,
       "power": null,
       "text": "Deal 2 damage to target Unit.",
       "locale": {
@@ -547,7 +547,7 @@
       "type": "spell",
       "rarity": "Common",
       "mana": 1,
-      "armor": null,
+      "health": null,
       "power": null,
       "text": "Draw 1 card, then discard 1 card.",
       "locale": {
@@ -595,7 +595,7 @@
       "type": "spell",
       "rarity": "Rare",
       "mana": 2,
-      "armor": null,
+      "health": null,
       "power": null,
       "text": "Deal 3 damage to target Unit. Each player draws 1 card.",
       "locale": {
@@ -643,7 +643,7 @@
       "type": "spell",
       "rarity": "Common",
       "mana": 3,
-      "armor": null,
+      "health": null,
       "power": null,
       "text": "Return target Unit you control to your hand.",
       "locale": {
@@ -738,7 +738,7 @@
       "type": "unit",
       "rarity": "Uncommon",
       "mana": 2,
-      "armor": 2,
+      "health": 2,
       "power": 3,
       "text": "Attack: Exhaust target Unit.",
       "locale": {
@@ -786,7 +786,7 @@
       "type": "unit",
       "rarity": "Uncommon",
       "mana": 5,
-      "armor": 2,
+      "health": 2,
       "power": 1,
       "text": "Destroyed: Deal 2 damage to all Units.",
       "locale": {
@@ -834,7 +834,7 @@
       "type": "unit",
       "rarity": "Rare",
       "mana": 2,
-      "armor": 2,
+      "health": 2,
       "power": 0,
       "text": "Whenever you draw a card, this Unit gets +1/+0 until end of turn.",
       "locale": {
@@ -882,7 +882,7 @@
       "type": "unit",
       "rarity": "Uncommon",
       "mana": 1,
-      "armor": 1,
+      "health": 1,
       "power": 2,
       "text": "Attack: Deal 1 damage to each opponent.",
       "locale": {
@@ -930,7 +930,7 @@
       "type": "spell",
       "rarity": "Common",
       "mana": 4,
-      "armor": null,
+      "health": null,
       "power": null,
       "text": "Draw 3 cards, then discard 2 cards.",
       "locale": {
@@ -978,7 +978,7 @@
       "type": "spell",
       "rarity": "Common",
       "mana": 5,
-      "armor": null,
+      "health": null,
       "power": null,
       "text": "Destroy target Unit.",
       "locale": {
@@ -1026,7 +1026,7 @@
       "type": "spell",
       "rarity": "Common",
       "mana": 4,
-      "armor": null,
+      "health": null,
       "power": null,
       "text": "Return target Unit to its owner's hand.",
       "locale": {
@@ -1074,7 +1074,7 @@
       "type": "spell",
       "rarity": "Common",
       "mana": 1,
-      "armor": null,
+      "health": null,
       "power": null,
       "text": "Return target Unit you control to your hand.",
       "locale": {
@@ -1122,7 +1122,7 @@
       "type": "unit",
       "rarity": "Rare",
       "mana": 3,
-      "armor": 2,
+      "health": 2,
       "power": 2,
       "text": "Destroyed: Draw 2 cards.",
       "locale": {
@@ -1170,7 +1170,7 @@
       "type": "unit",
       "rarity": "Uncommon",
       "mana": 4,
-      "armor": 3,
+      "health": 3,
       "power": 3,
       "text": "Whenever you play a Spell, deal 1 damage to each Player.",
       "locale": {
@@ -1218,7 +1218,7 @@
       "type": "spell",
       "rarity": "Uncommon",
       "mana": 4,
-      "armor": null,
+      "health": null,
       "power": null,
       "text": "Deal 1 damage to each Unit and Player.",
       "locale": {
@@ -1266,7 +1266,7 @@
       "type": "unit",
       "rarity": "Common",
       "mana": 2,
-      "armor": 3,
+      "health": 3,
       "power": 0,
       "text": "Whenever you play a Spell, remove all damage from Mending Shaman.",
       "locale": {
@@ -1314,7 +1314,7 @@
       "type": "spell",
       "rarity": "Uncommon",
       "mana": 4,
-      "armor": null,
+      "health": null,
       "power": null,
       "text": "Deal damage to your opponent equal to the number of cards in your hand.",
       "locale": {
@@ -1362,7 +1362,7 @@
       "type": "unit",
       "rarity": "Common",
       "mana": 3,
-      "armor": 1,
+      "health": 1,
       "power": 1,
       "text": "Whenever you play a Spell, Molten Shaman gains +1/+0 until end of turn.",
       "locale": {
@@ -1410,7 +1410,7 @@
       "type": "unit",
       "rarity": "Uncommon",
       "mana": 4,
-      "armor": 2,
+      "health": 2,
       "power": 4,
       "text": "",
       "locale": {
@@ -1458,7 +1458,7 @@
       "type": "spell",
       "rarity": "Rare",
       "mana": 1,
-      "armor": null,
+      "health": null,
       "power": null,
       "text": "Discard 2 cards, gain 2 mana",
       "locale": {
@@ -1506,7 +1506,7 @@
       "type": "spell",
       "rarity": "Rare",
       "mana": 5,
-      "armor": null,
+      "health": null,
       "power": 0,
       "text": "Discard your hand, draw 3 cards, then deal 3 damage to target Unit.",
       "locale": {
@@ -1554,7 +1554,7 @@
       "type": "unit",
       "rarity": "Rare",
       "mana": 4,
-      "armor": 1,
+      "health": 1,
       "power": 3,
       "text": "Every time you draw 1 or more cards, deal 1 damage to each Opponent",
       "locale": {
@@ -1602,7 +1602,7 @@
       "type": "spell",
       "rarity": "Common",
       "mana": 3,
-      "armor": null,
+      "health": null,
       "power": null,
       "text": "Draw 2 cards.",
       "locale": {
@@ -1650,7 +1650,7 @@
       "type": "unit",
       "rarity": "Uncommon",
       "mana": 2,
-      "armor": 2,
+      "health": 2,
       "power": 0,
       "text": "Deal 2 damage to target Unit.",
       "locale": {
@@ -1698,7 +1698,7 @@
       "type": "spell",
       "rarity": "Common",
       "mana": 1,
-      "armor": null,
+      "health": null,
       "power": null,
       "text": "Deal 1 damage to target Unit.",
       "locale": {
@@ -1746,7 +1746,7 @@
       "type": "unit",
       "rarity": "Legendary",
       "mana": 3,
-      "armor": 2,
+      "health": 2,
       "power": 2,
       "text": "Whenever you play a Spell, Ready Seeker of Forbidden Truth.",
       "locale": {
@@ -1794,7 +1794,7 @@
       "type": "unit",
       "rarity": "Common",
       "mana": 1,
-      "armor": 1,
+      "health": 1,
       "power": 0,
       "text": "Play: Draw 1 card.",
       "locale": {
@@ -1842,7 +1842,7 @@
       "type": "unit",
       "rarity": "Uncommon",
       "mana": 3,
-      "armor": 3,
+      "health": 3,
       "power": 1,
       "text": "Destroyed: Gain 2 mana.",
       "locale": {
@@ -1890,7 +1890,7 @@
       "type": "spell",
       "rarity": "Common",
       "mana": 2,
-      "armor": null,
+      "health": null,
       "power": null,
       "text": "Remove all damage from target Unit you control.",
       "locale": {
@@ -1938,7 +1938,7 @@
       "type": "spell",
       "rarity": "Legendary",
       "mana": 5,
-      "armor": null,
+      "health": null,
       "power": null,
       "text": "Discard your hand, then deal 7 damage to target Player.",
       "locale": {
@@ -1986,7 +1986,7 @@
       "type": "unit",
       "rarity": "Common",
       "mana": 1,
-      "armor": 1,
+      "health": 1,
       "power": 1,
       "text": "Play: Exhaust a Unit you control. Draw 1 card.",
       "locale": {
@@ -2034,7 +2034,7 @@
       "type": "unit",
       "rarity": "Rare",
       "mana": 5,
-      "armor": 2,
+      "health": 2,
       "power": 3,
       "text": "Play: Return target Unit to its owner's hand.",
       "locale": {
@@ -2082,7 +2082,7 @@
       "type": "spell",
       "rarity": "Uncommon",
       "mana": 3,
-      "armor": null,
+      "health": null,
       "power": null,
       "text": "Return target Unit your opponent controls to their hand.",
       "locale": {
@@ -2130,7 +2130,7 @@
       "type": "unit",
       "rarity": "Common",
       "mana": 5,
-      "armor": 4,
+      "health": 4,
       "power": 0,
       "text": "Whenever you play a Spell, remove all damage from Wall of Aether.",
       "locale": {
@@ -2178,7 +2178,7 @@
       "type": "unit",
       "rarity": "Uncommon",
       "mana": 3,
-      "armor": 2,
+      "health": 2,
       "power": 3,
       "text": "",
       "locale": {
@@ -2226,7 +2226,7 @@
       "type": "unit",
       "rarity": "Common",
       "mana": 4,
-      "armor": 2,
+      "health": 2,
       "power": 1,
       "text": "Play: Ready target Unit you control.",
       "locale": {
@@ -2274,7 +2274,7 @@
       "type": "unit",
       "rarity": "Common",
       "mana": 4,
-      "armor": 2,
+      "health": 2,
       "power": 2,
       "text": "Attack: Draw 2 cards, then discard 3 cards.",
       "locale": {

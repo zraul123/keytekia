@@ -41,7 +41,6 @@ module.exports = {
     ReapGameAction: require('./ReapGameAction'),
     RearrangeBattlelineAction: require('./RearrangeBattlelineAction'),
     RearrangeCardsAction: require('./RearrangeCardsAction'),
-    ReduceArmorAction: require('./ReduceArmorAction'),
     RemoveStunAction: require('./RemoveStunAction'),
     RemoveTokenAction: require('./RemoveTokenAction'),
     RemoveWardAction: require('./RemoveWardAction'),

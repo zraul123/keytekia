@@ -30,7 +30,6 @@ const Effects = {
     keyAmber: () => EffectBuilder.card.static('keyAmber'),
     limitFightDamage: (amount) => EffectBuilder.card.flexible('limitFightDamage', amount),
     modifyAmberValue: (amount) => EffectBuilder.card.flexible('modifyAmberValue', amount),
-    modifyArmor: (amount) => EffectBuilder.card.flexible('modifyArmor', amount),
     modifyPower: (amount) => EffectBuilder.card.flexible('modifyPower', amount),
     playAbilitiesAddReap: () => EffectBuilder.card.static('playAbilitiesAddReap'),
     reapAbilitiesAddFight: () => EffectBuilder.card.static('reapAbilitiesAddFight'),

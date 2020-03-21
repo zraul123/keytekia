@@ -942,16 +942,9 @@ class Game extends EventEmitter {
 
             // destroy any creatures who have damage greater than equal to their power
             let creaturesToDestroy = this.creaturesInPlay.filter(card =>
-                card.type === 'creature' && (card.power <= 0 || card.tokens.damage >= card.power) && !card.moribund);
+                card.type === 'unit' && (card.health <= 0 || card.tokens.damage >= card.health) && !card.moribund);
             if(creaturesToDestroy.length > 0) {
                 this.actions.destroy().resolve(creaturesToDestroy, this.getFrameworkContext());
-            }
-
-            for(let card of this.creaturesInPlay) {
-                card.removeToken('armor');
-                if(card.armor - card.armorUsed > 0) {
-                    card.addToken('armor', card.armor - card.armorUsed);
-                }
             }
 
             // any terminal conditions which have met their condition

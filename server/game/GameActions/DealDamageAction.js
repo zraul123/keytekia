@@ -9,11 +9,10 @@ class DealDamageAction extends CardGameAction {
         this.damageType = 'card effect';
         this.splash = 0;
         this.purge = false;
-        this.ignoreArmor = false;
     }
 
     setup() {
-        this.targetType = ['creature'];
+        this.targetType = ['unit'];
         this.name = 'damage';
         this.effectMsg = 'deal ' + (this.amount ? this.amount + ' ' : '') + 'damage to {0}' + (this.splash ? ' and ' + this.splash + ' to their neighbors' : '');
     }
@@ -45,35 +44,14 @@ class DealDamageAction extends CardGameAction {
             damageType: this.damageType,
             destroyed: false,
             fightEvent: this.fightEvent,
-            ignoreArmor: this.ignoreArmor
         };
 
-        // Update armor token
-        if(this.noGameStateCheck) {
-            card.removeToken('armor');
-            if(card.armor - card.armorUsed > 0) {
-                card.addToken('armor', card.armor - card.armorUsed);
-            }
-        }
 
         return super.createEvent('onDamageDealt', params, event => {
             let amount = event.amount;
 
             if(amount === 0) {
                 return;
-            }
-
-            if(!event.ignoreArmor) {
-                const currentArmor = event.card.armor - event.card.armorUsed;
-                if(amount <= currentArmor) {
-                    card.armorUsed += event.amount;
-                    event.damagePrevented = amount;
-                    return;
-                }
-
-                event.damagePrevented = currentArmor;
-                card.armorUsed += currentArmor;
-                amount -= currentArmor;
             }
 
             event.card.addToken('damage', amount);

@@ -26,7 +26,6 @@ const Actions = {
     ready: (propertyFactory) => new GameActions.ReadyAction(propertyFactory),
     reap: (propertyFactory) => new GameActions.ReapGameAction(propertyFactory),
     rearrangeBattleline: (propertyFactory) => new GameActions.RearrangeBattlelineAction(propertyFactory),
-    reduceArmor: (propertyFactory) => new GameActions.ReduceArmorAction(propertyFactory),
     removeAmber: (propertyFactory) => new GameActions.RemoveTokenAction(propertyFactory, 'amber'),
     removeDamage: (propertyFactory) => new GameActions.RemoveTokenAction(propertyFactory, 'damage'),
     removePowerCounter: (propertyFactory) => new GameActions.RemoveTokenAction(propertyFactory),

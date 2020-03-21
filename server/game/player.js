@@ -360,11 +360,6 @@ class Player extends GameObject {
                 return;
             }
 
-            for(let upgrade of card.upgrades) {
-                upgrade.onLeavesPlay();
-                upgrade.owner.moveCard(upgrade, 'discard');
-            }
-
             for(let child of card.childCards) {
                 child.onLeavesPlay();
                 child.owner.moveCard(child, 'discard');
@@ -482,7 +477,7 @@ class Player extends GameObject {
             ],
             'type': 'player',
             'rarity': 'Rare',
-            'armor': null,
+            'health': 30,
             'power': null,
             'text': 'Player',
             'locale': {
