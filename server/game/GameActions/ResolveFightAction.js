@@ -79,6 +79,7 @@ class ResolveFightAction extends CardGameAction {
             event.addSubEvent(damageEvents);
             event.card.elusiveUsed = true;
             context.player.creatureFought = true;
+            event.attacker.exhaust();
         });
     }
 }
