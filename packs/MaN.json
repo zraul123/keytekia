@@ -2278,9 +2278,6 @@
       "power": 2,
       "text": "Attack: Draw 2 cards, then discard 3 cards.",
       "locale": {
-        "de": {
-          "name": "Zorn"
-        },
         "en": {
           "name": "Warbound Acolyte"
         },
