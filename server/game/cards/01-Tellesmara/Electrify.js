@@ -12,7 +12,7 @@ class Electrify extends Card {
                         target: context.player.opponent
                     }))]
             }
-        })
+        });
     }
 }
 

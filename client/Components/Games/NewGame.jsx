@@ -214,8 +214,8 @@ class NewGame extends React.Component {
             content =
                 (<div>
                     <AlertPanel type='info' message={ t('Select the type of game you\'d like to play and either you\'ll join the next one available, or one will be created for you with default options.') } />
-                    { this.getGameFormatOptions() }
-                    { this.getGameTypeOptions() }
+                    {/*{ this.getGameFormatOptions() }*/}
+                    {/*{ this.getGameTypeOptions() }*/}
                 </div>);
         } else {
             content = (<div>
@@ -227,8 +227,8 @@ class NewGame extends React.Component {
                     </div>
                 </div>
                 { this.getOptions() }
-                { this.getGameFormatOptions() }
-                { this.getGameTypeOptions() }
+                {/*{ this.getGameFormatOptions() }*/}
+                {/*{ this.getGameTypeOptions() }*/}
                 <div className='row game-password'>
                     <div className='col-sm-8'>
                         <label><Trans>Password</Trans></label>

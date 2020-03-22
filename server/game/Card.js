@@ -424,6 +424,7 @@ class Card extends EffectSource {
 
     ready() {
         this.exhausted = false;
+        this.resting = false;
     }
 
     removeAttachment(card) {
