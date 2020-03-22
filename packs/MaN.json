@@ -19,8 +19,8 @@
       "type": "unit",
       "rarity": "Uncommon",
       "mana": 1,
-      "health": null,
-      "power": null,
+      "health": 1,
+      "power": 2,
       "text": "Destroyed: Draw 1 card.",
       "locale": {
         "de": {
@@ -404,7 +404,7 @@
       "rarity": "Rare",
       "mana": 3,
       "health": null,
-      "power": 0,
+      "power": null,
       "text": "Each player shuffles their hands into their decks and then draws 3 cards.",
       "locale": {
         "de": {
@@ -1507,7 +1507,7 @@
       "rarity": "Rare",
       "mana": 5,
       "health": null,
-      "power": 0,
+      "power": null,
       "text": "Discard your hand, draw 3 cards, then deal 3 damage to target Unit.",
       "locale": {
         "de": {
