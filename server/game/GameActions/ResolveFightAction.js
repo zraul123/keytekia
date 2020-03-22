@@ -54,7 +54,8 @@ class ResolveFightAction extends CardGameAction {
             };
 
             if (event.card.type === 'player') {
-                context.game.actions.dealDamageToPlayer({amount: attackerParams.amount, target: event.card.owner})
+                event.card.owner.health -= attackerParams.amount;
+                return;
             }
 
             if(!event.card.getKeywordValue('elusive') || event.card.elusiveUsed || event.attacker.ignores('elusive')) {
