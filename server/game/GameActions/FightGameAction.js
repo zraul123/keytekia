@@ -11,7 +11,6 @@ class FightGameAction extends CardGameAction {
     canAffect(card, context) {
         let fightAction = card.getFightAction();
         let newContext = fightAction.createContext(context.player);
-        newContext.ignoreHouse = true;
         if(!fightAction || fightAction.meetsRequirements(newContext, ['stunned'])) {
             return false;
         }

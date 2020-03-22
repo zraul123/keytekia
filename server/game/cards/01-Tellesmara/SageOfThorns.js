@@ -1,12 +1,16 @@
 const Card = require('../../Card.js');
+const _ = require('underscore');
 
 class SageOfThorns extends Card {
     setupCardAbilities(ability) {
         this.destroyed({
-            target: {
-                cardType: 'unit',
-                gameAction: ability.actions.dealDamage({ amoung: 2 })
-            }
+            gameAction: ability.actions.dealDamage(context => 
+            ({
+                condition: context.player.opponent.creaturesInPlay.length >= 1,
+                amount: 2,
+                target: context.player.opponent.creaturesInPlay[Math.floor(Math.random() * context.player.opponent.creaturesInPlay.length)]
+                })
+            )
         })
     }
 }

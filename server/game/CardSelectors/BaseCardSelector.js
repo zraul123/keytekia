@@ -37,11 +37,6 @@ class BaseCardSelector {
             return context.game.allCards;
         }
 
-        let upgrades = context.player.cardsInPlay.reduce((array, card) => array.concat(card.upgrades), []);
-        if(context.player.opponent) {
-            upgrades = upgrades.concat(...context.player.opponent.cardsInPlay.map(card => card.upgrades));
-        }
-
         let possibleCards = [];
         if(this.controller !== 'opponent') {
             possibleCards = this.location.reduce((array, location) => {

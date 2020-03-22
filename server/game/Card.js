@@ -132,13 +132,6 @@ class Card extends EffectSource {
     }
 
     setupKeywordAbilities(ability) {
-        // Taunt
-        this.abilities.keywordPersistentEffects.push(this.persistentEffect({
-            condition: () => this.hasKeyword('guardian') && this.type === 'unit',
-            printedAbility: false,
-            effect: ability.effects.cardCannot('attackDueToTaunt')
-        }));
-
         // Swift
         this.abilities.reactions.push(this.play({
             condition: () => this.hasKeyword('Swift'),
@@ -501,10 +494,6 @@ class Card extends EffectSource {
             let context = action.createContext(player);
             return !action.meetsRequirements(context) && this.controller.hasEnoughMana(action.manaCost);
         });
-        let canFight = actions.findIndex(action => action.title === 'Fight with this unit') >= 0;
-        if(this.getEffects('mustFightIfAble').length > 0 && canFight) {
-            actions = actions.filter(action => action.title === 'Fight with this unit');
-        }
 
         return actions;
     }

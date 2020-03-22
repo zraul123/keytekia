@@ -13,7 +13,7 @@ class ResolveFightAction extends CardGameAction {
             return false;
         } else if(!this.attacker.checkRestrictions('fight') || card.controller === this.attacker.controller) {
             return false;
-        } else if(!card.checkRestrictions('attackDueToTaunt') && !this.attacker.ignores('taunt') && context.stage !== 'effect') {
+        } else if(card.controller.guardians.length > 0 && !card.controller.guardians.includes(card)) {
             return false;
         }
 
@@ -34,19 +34,13 @@ class ResolveFightAction extends CardGameAction {
             let damageEvents = [];
 
             let defenderAmount = event.card.power;
-            if(event.card.anyEffect('limitFightDamage')) {
-                defenderAmount = Math.min(defenderAmount, ...event.card.getEffects('limitFightDamage'));
-            }
             let defenderParams = {
                 amount: defenderAmount,
                 fightEvent: event,
                 damageSource: event.card
             };
 
-            let attackerAmount = event.attacker.power + event.attacker.getBonusDamage(event.attackerTarget);
-            if(event.attacker.anyEffect('limitFightDamage')) {
-                attackerAmount = Math.min(attackerAmount, ...event.attacker.getEffects('limitFightDamage'));
-            }
+            let attackerAmount = event.attacker.power;
             let attackerParams = {
                 amount: attackerAmount,
                 fightEvent: event,
@@ -58,17 +52,8 @@ class ResolveFightAction extends CardGameAction {
                 return;
             }
 
-            if(!event.card.getKeywordValue('elusive') || event.card.elusiveUsed || event.attacker.ignores('elusive')) {
-                if((!event.attacker.getKeywordValue('skirmish') || event.defenderTarget !== event.attacker) && event.card.checkRestrictions('dealFightDamage') && event.attackerTarget.checkRestrictions('dealFightDamageWhenDefending')) {
-                    damageEvents.push(context.game.actions.dealDamage(defenderParams).getEvent(event.defenderTarget, context));
-                }
-
-                if(event.attacker.checkRestrictions('dealFightDamage')) {
-                    damageEvents.push(context.game.actions.dealDamage(attackerParams).getEvent(event.attackerTarget, context));
-                }
-            } else if(event.attackerTarget !== event.card && event.attacker.checkRestrictions('dealFightDamage')) {
-                damageEvents.push(context.game.actions.dealDamage(attackerParams).getEvent(event.attackerTarget, context));
-            }
+            damageEvents.push(context.game.actions.dealDamage(defenderParams).getEvent(event.defenderTarget, context));
+            damageEvents.push(context.game.actions.dealDamage(attackerParams).getEvent(event.attackerTarget, context));
 
             damageEvents.push(context.game.getEvent('unnamedEvent', {}, () => {
                 event.card.isFighting = false;
