@@ -5,10 +5,14 @@ class Electrify extends Card {
         this.play({
             target: {
                 cardType: 'unit',
-                gameAction: ability.actions.dealDamage({ amount: 1})
+                gameAction: [
+                    ability.actions.dealDamage({ amount: 1 }),
+                    ability.actions.dealDamageToPlayer(context => ({
+                        amount: 1,
+                        target: context.player.opponent
+                    }))]
             }
         })
-        // TODO: Add deal 1 damage to target player
     }
 }
 
