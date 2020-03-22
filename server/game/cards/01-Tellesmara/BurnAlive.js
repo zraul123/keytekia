@@ -5,7 +5,7 @@ class BurnAlive extends Card {
         this.play({
             target: {
                 cardType: 'unit',
-                gameAction: ability.actions.dealDamage({ amoung: 5 })
+                gameAction: ability.actions.dealDamage({ amount: 5 })
             }
         })
     }
