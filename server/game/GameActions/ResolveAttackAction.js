@@ -57,7 +57,15 @@ class ResolveAttackAction extends CardGameAction {
                 event.card.owner.health -= attackerParams.amount;
             }
 
-            if(event.attackerTarget !== event.card && event.attacker.checkRestrictions('dealAttackDamage')) {
+            if(!event.card.getKeywordValue('elusive') || event.card.elusiveUsed || event.attacker.ignores('elusive')) {
+                if((!event.attacker.getKeywordValue('skirmish') || event.defenderTarget !== event.attacker) && event.card.checkRestrictions('dealAttackDamage') && event.attackerTarget.checkRestrictions('dealFightDamageWhenDefending')) {
+                    damageEvents.push(context.game.actions.dealDamage(defenderParams).getEvent(event.defenderTarget, context));
+                }
+
+                if(event.attacker.checkRestrictions('dealAttackDamage')) {
+                    damageEvents.push(context.game.actions.dealDamage(attackerParams).getEvent(event.attackerTarget, context));
+                }
+            } else if(event.attackerTarget !== event.card && event.attacker.checkRestrictions('dealAttackDamage')) {
                 damageEvents.push(context.game.actions.dealDamage(attackerParams).getEvent(event.attackerTarget, context));
             }
 
