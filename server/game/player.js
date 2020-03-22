@@ -376,7 +376,7 @@ class Player extends GameObject {
                 card.setDefaultController(this);
             }
 
-            card.exhausted = true;
+            card.resting = true;
         } else if(card.owner !== this) {
             card.owner.moveCard(card, targetLocation, options);
             return;
@@ -481,7 +481,7 @@ class Player extends GameObject {
             ],
             'type': 'player',
             'rarity': 'Rare',
-            'health': 30,
+            'health': 25,
             'power': null,
             'text': 'Player',
             'locale': {

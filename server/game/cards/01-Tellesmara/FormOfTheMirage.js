@@ -8,7 +8,7 @@ class FormOfTheMirage extends Card {
                 controller: 'self',
                 gameAction: ability.actions.returnToHand()
             }
-        })
+        });
     }
 }
 

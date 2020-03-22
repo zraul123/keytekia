@@ -2,12 +2,12 @@ const Card = require('../../Card.js');
 
 class BurnAlive extends Card {
     setupCardAbilities(ability) {
-        this.fight({
+        this.attack({
             target: {
                 cardType: 'unit',
                 gameAction: ability.actions.exhaust()
             }
-        })
+        });
     }
 }
 

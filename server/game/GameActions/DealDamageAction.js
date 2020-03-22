@@ -4,7 +4,7 @@ class DealDamageAction extends CardGameAction {
     setDefaultProperties() {
         this.amount = null;
         this.amountForCard = () => 1;
-        this.fightEvent = null;
+        this.attackEvent = null;
         this.damageSource = null;
         this.damageType = 'card effect';
         this.splash = 0;
@@ -43,7 +43,7 @@ class DealDamageAction extends CardGameAction {
             damageSource: this.damageSource,
             damageType: this.damageType,
             destroyed: false,
-            fightEvent: this.fightEvent,
+            attackEvent: this.attackEvent,
         };
 
 
@@ -66,9 +66,9 @@ class DealDamageAction extends CardGameAction {
 
             event.card.addToken('damage', amount);
             if(!event.card.moribund && !this.noGameStateCheck && (event.card.tokens.damage >= event.card.power || event.damageSource && event.damageSource.getKeywordValue('poison'))) {
-                event.addSubEvent(context.game.actions.destroy({ inFight: !!event.fightEvent, purge: this.purge }).getEvent(event.card, context.game.getFrameworkContext()));
-                if(event.fightEvent) {
-                    event.fightEvent.destroyed.push(event.card);
+                event.addSubEvent(context.game.actions.destroy({ inFight: !!event.attackEvent, purge: this.purge }).getEvent(event.card, context.game.getFrameworkContext()));
+                if(event.attackEvent) {
+                    event.attackEvent.destroyed.push(event.card);
                 }
 
                 event.destroyed = true;

@@ -5,9 +5,9 @@ class Consideration extends Card {
         this.play({
             gameAction: [
                 ability.actions.draw({ amount: 1 }),
-                ability.actions.chosenDiscard({ amount: 1, controller: 'self'})
+                ability.actions.chosenDiscard({ amount: 1, controller: 'self' })
             ]
-        })
+        });
     }
 }
 

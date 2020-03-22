@@ -36,14 +36,14 @@ class ResolveFightAction extends CardGameAction {
             let defenderAmount = event.card.power;
             let defenderParams = {
                 amount: defenderAmount,
-                fightEvent: event,
+                attackEvent: event,
                 damageSource: event.card
             };
 
             let attackerAmount = event.attacker.power;
             let attackerParams = {
                 amount: attackerAmount,
-                fightEvent: event,
+                attackEvent: event,
                 damageSource: event.attacker
             };
 

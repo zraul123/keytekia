@@ -4,15 +4,10 @@ const AbilityDsl = require('./abilitydsl.js');
 const CardAction = require('./cardaction.js');
 const EffectSource = require('./EffectSource.js');
 const TriggeredAbility = require('./triggeredability');
-
-const DiscardAction = require('./BaseActions/DiscardAction');
 const PlaySpell = require('./BaseActions/PlaySpell');
-const PlayCreatureAction = require('./BaseActions/PlayCreatureAction');
+const PlayUnitAction = require('./BaseActions/PlayUnitAction');
 const PlayRelicAction = require('./BaseActions/PlayRelicAction');
-const ResolveFightAction = require('./GameActions/ResolveFightAction');
 const ResolveAttackAction = require('./GameActions/ResolveAttackAction');
-const ResolveReapAction = require('./GameActions/ResolveReapAction');
-const RemoveStun = require('./BaseActions/RemoveStun');
 
 class Card extends EffectSource {
     constructor(owner, cardData) {
@@ -136,7 +131,7 @@ class Card extends EffectSource {
         this.abilities.reactions.push(this.play({
             condition: () => this.hasKeyword('Swift'),
             gameAction: ability.actions.ready()
-        }))
+        }));
     }
 
     play(properties) {
@@ -153,10 +148,6 @@ class Card extends EffectSource {
 
     fight(properties) {
         return this.reaction(Object.assign({ fight: true, name: 'Fight' }, properties));
-    }
-
-    reap(properties) {
-        return this.reaction(Object.assign({ reap: true, name: 'Reap' }, properties));
     }
 
     destroyed(properties) {
@@ -181,6 +172,10 @@ class Card extends EffectSource {
         return this.interrupt(Object.assign({ when: { onFight: (event, context) => event.attacker === context.source } }, properties));
     }
 
+    beforeAttack(properties) {
+        return this.interrupt(Object.assign({ when: { onAttack: (event, context) => event.attacker === context.source } }, properties));
+    }
+
     triggeredAbility(abilityType, properties) {
         const ability = new TriggeredAbility(this.game, this, abilityType, properties);
         if(ability.printedAbility) {
@@ -198,7 +193,7 @@ class Card extends EffectSource {
         if(properties.play || properties.fight || properties.reap) {
             properties.when = {
                 onCardPlayed: (event, context) => event.card === context.source,
-                onFight: (event, context) => event.attacker === context.source,
+                onAttack: (event, context) => event.attacker === context.source,
                 onReap: (event, context) => event.card === context.source
             };
         }
@@ -395,7 +390,7 @@ class Card extends EffectSource {
     }
 
     getToken(token) {
-        return this.hasToken(token) ? this.tokens[token] : 0; 
+        return this.hasToken(token) ? this.tokens[token] : 0;
     }
 
     createSnapshot() {
@@ -478,6 +473,11 @@ class Card extends EffectSource {
             let context = action.createContext(player);
             this.game.resolveAbility(context);
         });
+
+        choices = choices.concat('Cancel');
+        handlers = handlers.concat(() => true);
+
+
         this.game.promptWithHandlerMenu(player, {
             activePromptTitle: (this.location === 'play area' ? 'Choose an ability:' :
                 { text: 'Play {{card}}:', values: { card: this.name } }),
@@ -513,47 +513,18 @@ class Card extends EffectSource {
         });
     }
 
-    getFightAction() {
-        return this.action({
-            title: 'Fight with this unit',
-            condition: context => this.checkRestrictions('fight', context) && this.type === 'unit',
-            printedAbility: false,
-            target: {
-                activePromptTitle: 'Choose a unit to attack',
-                cardType: ['unit', 'player'],
-                controller: 'opponent',
-                gameAction: new ResolveFightAction({ attacker: this })
-            }
-        });
-    }
-
-    getReapAction() {
-        return this.action({
-            title: 'Reap with this unit',
-            condition: context => this.checkRestrictions('reap', context) && this.type === 'unit',
-            printedAbility: false,
-            gameAction: new ResolveReapAction()
-        });
-    }
-
-    getRemoveStunAction() {
-        return new RemoveStun(this);
-    }
-
     getActions(location = this.location) {
         let actions = [];
         if(location === 'hand') {
             if(this.type === 'unit') {
-                actions.push(new PlayCreatureAction(this));
+                actions.push(new PlayUnitAction(this));
             } else if(this.type === 'relic') {
                 actions.push(new PlayRelicAction(this));
             } else if(this.type === 'spell') {
                 actions.push(new PlaySpell(this));
             }
-
-            actions.push(new DiscardAction(this));
         } else if(location === 'play area' && this.type === 'unit') {
-            actions.push(this.getFightAction());
+            actions.push(this.getAttackAction());
         }
 
         return actions.concat(this.actions.slice());

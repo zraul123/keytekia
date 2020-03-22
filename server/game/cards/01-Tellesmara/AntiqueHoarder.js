@@ -2,7 +2,7 @@ const Card = require('../../Card.js');
 
 class AntiqueHoarder extends Card {
     setupCardAbilities(ability) {
-        this.fight({
+        this.attack({
             gameAction: ability.actions.dealDamage({ amount: 1 })
         });
     }

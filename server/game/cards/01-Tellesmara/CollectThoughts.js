@@ -5,9 +5,9 @@ class CollectThoughts extends Card {
         this.play({
             gameAction: [
                 ability.actions.draw((context) => ({ amount: 2, target: context.player.opponent })),
-                ability.actions.draw((context) => ({ amount: 2, target: context.player })),
+                ability.actions.draw((context) => ({ amount: 2, target: context.player }))
             ]
-        })
+        });
     }
 }
 

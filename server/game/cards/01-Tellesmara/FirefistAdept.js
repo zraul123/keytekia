@@ -2,7 +2,7 @@ const Card = require('../../Card.js');
 
 class FirefistAdept extends Card {
     setupCardAbilities(ability) {
-        this.fight({
+        this.attack({
             gameAction: [
                 ability.actions.dealDamageToPlayer(context => ({
                     amount: 1,

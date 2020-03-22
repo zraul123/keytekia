@@ -1,17 +1,17 @@
 const CardGameAction = require('./CardGameAction');
 
-class FightGameAction extends CardGameAction {
+class AttackGameAction extends CardGameAction {
     setup() {
-        this.name = 'fight';
+        this.name = 'attack';
         this.targetType = ['unit', 'player'];
-        this.effectMsg = 'fight with {0}';
+        this.effectMsg = 'attack with {0}';
         this.manaCost = 0;
     }
 
     canAffect(card, context) {
-        let fightAction = card.getFightAction();
-        let newContext = fightAction.createContext(context.player);
-        if(!fightAction || fightAction.meetsRequirements(newContext, ['stunned'])) {
+        let attackAction = card.getAttackAction();
+        let newContext = attackAction.createContext(context.player);
+        if(!attackAction || attackAction.meetsRequirements(newContext, ['stunned'])) {
             return false;
         }
 
@@ -19,14 +19,14 @@ class FightGameAction extends CardGameAction {
     }
 
     getEvent(card, context) {
-        return super.createEvent('onInitiateFight', { card, context }, () => {
+        return super.createEvent('onInitiateAttack', { card, context }, () => {
             let newContext;
             if(card.stunned) {
                 let removeStunAction = card.getActions().find(action => action.title === 'Remove this creature\'s stun');
                 newContext = removeStunAction.createContext(context.player);
             } else {
-                let fightAction = card.getFightAction();
-                newContext = fightAction.createContext(context.player);
+                let attackAction = card.getAttackAction();
+                newContext = attackAction.createContext(context.player);
             }
 
             newContext.canCancel = false;
@@ -36,4 +36,4 @@ class FightGameAction extends CardGameAction {
     }
 }
 
-module.exports = FightGameAction;
+module.exports = AttackGameAction;

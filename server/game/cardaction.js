@@ -49,6 +49,8 @@ class CardAction extends CardAbility {
             return 'stunned';
         } else if (this.card.exhausted) {
             return 'exhausted';
+        } else if (this.card.resting) {
+            return 'resting';
         }
 
         return super.meetsRequirements(context);

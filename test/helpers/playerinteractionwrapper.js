@@ -16,26 +16,6 @@ class PlayerInteractionWrapper {
         return this.player.name;
     }
 
-    get amber() {
-        return this.player.amber;
-    }
-
-    set amber(newValue) {
-        if(newValue >= 0) {
-            this.player.amber = newValue;
-        }
-    }
-
-    get chains() {
-        return this.player.chains;
-    }
-
-    set chains(newValue) {
-        if(newValue > 0) {
-            this.player.chains = newValue;
-        }
-    }
-
     get hand() {
         return this.player.hand;
     }
@@ -114,17 +94,6 @@ class PlayerInteractionWrapper {
 
     get discard() {
         return this.player.discard;
-    }
-
-    set archives(newContents = []) {
-        var cardsInArchives = this.archives;
-        _.each(cardsInArchives, card => this.moveCard(card, 'deck'));
-        let cards = this.mixedListToCardList(newContents, 'deck');
-        _.each(cards, card => this.moveCard(card, 'archives'));
-    }
-
-    get archives() {
-        return this.player.archives;
     }
 
     get opponent() {
@@ -398,10 +367,6 @@ class PlayerInteractionWrapper {
         this.clickPrompt('Pass');
     }
 
-    checkActions(card) {
-        console.log(card.getActions().map(action => [action.title, action.meetsRequirements()]));
-    }
-
     fightWith(creature, target) {
         if(creature.type !== 'unit' || !this.hasPrompt('Choose a card to play or use')) {
             throw new Error(`${creature.name} cannot fight now`);
@@ -412,15 +377,6 @@ class PlayerInteractionWrapper {
         if(target) {
             this.clickCard(target);
         }
-    }
-
-    reap(creature) {
-        if(creature.type !== 'creature' || !this.hasPrompt('Choose a card to play, discard or use')) {
-            throw new Error(`${creature.name} cannot reap now`);
-        }
-
-        this.clickCard(creature);
-        this.clickPrompt('Reap with this creature');
     }
 
     play(card, left = false, deploy = false) {
@@ -507,26 +463,6 @@ class PlayerInteractionWrapper {
         if(results.length !== 0) {
             throw new Error('Unable to serialize game state back to client:\n' + JSON.stringify(results));
         }
-    }
-
-    forgeKey(color) {
-        if(this.hasPrompt('Which key would you like to forge?')) {
-            this.clickPrompt(color);
-        } else {
-            throw new Error(`${this.name} does not have a forge key prompt`);
-        }
-    }
-
-    unforgeKey(color) {
-        if(this.hasPrompt('Which key would you like to unforge?')) {
-            this.clickPrompt(color);
-        } else {
-            throw new Error(`${this.name} does not have an unforge key prompt`);
-        }
-    }
-
-    getForgedKeys() {
-        return this.player.getForgedKeys();
     }
 }
 

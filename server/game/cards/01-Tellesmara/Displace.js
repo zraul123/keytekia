@@ -8,7 +8,7 @@ class Displace extends Card {
                 controller: 'self',
                 gameAction: ability.actions.returnToHand()
             },
-            gameAction: ability.actions.draw({amount: 1})
+            gameAction: ability.actions.draw({ amount: 1 })
         })
     }
 }

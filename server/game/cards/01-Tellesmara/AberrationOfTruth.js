@@ -4,7 +4,7 @@ class AberrationOfTruth extends Card {
     setupCardAbilities(ability) {
         this.destroyed({
             gameAction: ability.actions.draw((context) => ({ amount: 1, target: context.player }))
-        })
+        });
     }
 }
 

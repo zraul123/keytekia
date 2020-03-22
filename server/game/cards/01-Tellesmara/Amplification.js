@@ -7,7 +7,7 @@ class Amplification extends Card {
                 ability.actions.draw({ amount: 2 }),
                 ability.actions.chosenDiscard({ amount: 2, controller: 'self'})
             ]
-        })
+        });
     }
 }
 

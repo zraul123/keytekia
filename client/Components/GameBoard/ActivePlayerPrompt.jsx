@@ -5,7 +5,6 @@ import { withTranslation } from 'react-i18next';
 import AbilityTargeting from './AbilityTargeting';
 import CardNameLookup from './CardNameLookup';
 import TraitNameLookup from './TraitNameLookup';
-import HouseSelect from './HouseSelect';
 import OptionsSelect from './OptionsSelect';
 import Panel from '../Site/Panel';
 
@@ -147,8 +146,6 @@ class ActivePlayerPrompt extends React.Component {
                     return <CardNameLookup cards={ this.props.cards } onCardSelected={ this.onCardNameSelected.bind(this, control.command, control.method) } />;
                 case 'trait-name':
                     return <TraitNameLookup cards={ this.props.cards } onValueSelected={ this.handleLookupValueSelected.bind(this, control.command, control.uuid, control.method) } />;
-                case 'house-select':
-                    return <HouseSelect buttons={ this.props.buttons } onHouseSelected={ this.onHouseSelected } />;
                 case 'options-select':
                     return <OptionsSelect options={ this.props.buttons } onOptionSelected={ this.onOptionSelected } />;
             }
