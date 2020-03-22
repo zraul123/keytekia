@@ -263,7 +263,8 @@ class Card extends EffectSource {
     }
 
     endRound() {
-        this.elusiveUsed = false;
+        this.tokens['additionalPower'] = 0;
+        this.tokens['additionalHealth'] = 0;
     }
 
     updateAbilityEvents(from, to) {

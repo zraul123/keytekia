@@ -1,7 +1,19 @@
 const Card = require('../../Card.js');
 
 class AcolyteOfAggression extends Card {
-    setupCardAbilities() {
+    setupCardAbilities(ability) {
+        this.reaction({
+            effect: 'Acolyte Of Aggression gets +1 power this turn!',
+            when: {
+                onPhaseStarted: event => event.phase === 'main'
+            },
+            gameAction: ability.actions.forRemainderOfTurn(context => ({
+                when: {
+                    onCardPlayed: event => event.card.type === 'spell' && context.player === event.player
+                },
+                effect: ability.effects.modifyPower(1)
+            }))
+        });
     }
 }
 
