@@ -1,7 +1,13 @@
 const Card = require('../../Card.js');
 
 class SearingTouch extends Card {
-    setupCardAbilities() {
+    setupCardAbilities(ability) {
+        this.play({
+            target: {
+                cardType: 'unit',
+                gameAction: ability.actions.dealDamage({ amount: 1})
+            }
+        })
     }
 }
 

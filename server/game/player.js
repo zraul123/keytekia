@@ -558,6 +558,12 @@ class Player extends GameObject {
         return 5 + this.sumEffects('modifyHandSize');
     }
 
+    dealDamage(amount) {
+        if (amount) {
+            this.health -= amount;
+        }
+    }
+
     getStats() {
         return {
             health: this.health,

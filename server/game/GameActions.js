@@ -7,6 +7,7 @@ const Actions = {
     capture: (propertyFactory) => new GameActions.CaptureAction(propertyFactory),
     cardLastingEffect: (propertyFactory) => new GameActions.LastingEffectCardAction(propertyFactory), // duration = 'untilEndOfConflict', effect, targetLocation, condition, until
     dealDamage: (propertyFactory) => new GameActions.DealDamageAction(propertyFactory),
+    dealDamageToPlayer: (propertyFactory) => new GameActions.DealDamageToPlayerAction(propertyFactory),
     delayedEffect: (propertyFactory) => new GameActions.DelayedEffectAction(propertyFactory), // when, message, gameAction, handler
     discard: (propertyFactory) => new GameActions.DiscardCardAction(propertyFactory),
     destroy: (propertyFactory) => new GameActions.DestroyAction(propertyFactory),

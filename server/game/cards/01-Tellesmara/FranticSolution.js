@@ -4,14 +4,10 @@ class FranticSolution extends Card {
     setupCardAbilities(ability) {
         this.play({
             effect: 'Draw 3 cards, then discard 2 cards.',
-            gameAction: ability.actions.draw({ amount: 3 }),
-            then: {
-                target: {
-                    controller: 'self',
-                    location: 'hand',
-                    gameAction: ability.actions.discard()
-                }
-            }
+            gameAction: [
+                ability.actions.draw((context) => ({ amount: 3, target: context.player })),
+                ability.actions.chosenDiscard({ amount: 2, controller: 'self'}),
+            ]
         });
     }
 }

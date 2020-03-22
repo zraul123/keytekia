@@ -1,7 +1,14 @@
 const Card = require('../../Card.js');
 
 class Transmute extends Card {
-    setupCardAbilities() {
+    setupCardAbilities(ability) {
+        this.play({
+            target: {
+                cardType: 'unit',
+                controller: 'opponent',
+                gameAction: ability.actions.returnToHand()
+            }
+        })
     }
 }
 

@@ -26,7 +26,7 @@ class GainManaAction extends PlayerAction {
             context: context
         };
         return super.createEvent('onModifyMana', params, event => {
-            player.mana = Math.max(event.amount, 0);
+            player.mana = Math.max(event.amount, 5);
         });
     }
 

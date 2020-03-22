@@ -1,7 +1,13 @@
 const Card = require('../../Card.js');
 
 class Mindbolt extends Card {
-    setupCardAbilities() {
+    setupCardAbilities(ability) {
+        this.play({
+            gameAction: ability.actions.dealDamageToPlayer(context => ({
+                    amount: context.player.hand.length + 1,
+                    target: context.player.opponent
+                }))
+        })
     }
 }
 
