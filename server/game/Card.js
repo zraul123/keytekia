@@ -38,21 +38,7 @@ class Card extends EffectSource {
             keywordPersistentEffects: []
         };
         this.traits = cardData.traits || [];
-        this.printedKeywords = {};
-        for(let keyword of cardData.keywords || []) {
-            let split = keyword.split(':');
-            let value = 1;
-            if(split.length > 1) {
-                value = parseInt(split[1]);
-            }
-
-            this.printedKeywords[split[0]] = value;
-            this.persistentEffect({
-                location: 'any',
-                match: this,
-                effect: AbilityDsl.effects.addKeyword({ [split[0]]: value })
-            });
-        }
+        this.keywords = cardData.keywords || [];
 
         this.printedFaction = cardData.faction;
         this.mana = cardData.mana;
@@ -148,21 +134,16 @@ class Card extends EffectSource {
     setupKeywordAbilities(ability) {
         // Taunt
         this.abilities.keywordPersistentEffects.push(this.persistentEffect({
-            condition: () => !!this.getKeywordValue('taunt') && this.type === 'creature',
+            condition: () => this.hasKeyword('guardian') && this.type === 'unit',
             printedAbility: false,
             effect: ability.effects.cardCannot('attackDueToTaunt')
         }));
 
-        // Invulnerable
-        this.abilities.keywordPersistentEffects.push(this.persistentEffect({
-            condition: () => !!this.getKeywordValue('invulnerable'),
-            printedAbility: false,
-            match: this,
-            effect: [
-                ability.effects.cardCannot('damage'),
-                ability.effects.cardCannot('destroy')
-            ]
-        }));
+        // Swift
+        this.abilities.reactions.push(this.play({
+            condition: () => this.hasKeyword('Swift'),
+            gameAction: ability.actions.ready()
+        }))
     }
 
     play(properties) {
@@ -279,10 +260,6 @@ class Card extends EffectSource {
     }
 
     onLeavesPlay() {
-        if(this.type === 'unit' && this.hasToken('amber') && this.controller.opponent) {
-            this.game.actions.gainAmber({ amount: this.tokens.amber }).resolve(this.controller.opponent, this.game.getFrameworkContext());
-        }
-
         this.exhausted = false;
         this.stunned = false;
         this.moribund = false;
@@ -420,16 +397,11 @@ class Card extends EffectSource {
     }
 
     hasKeyword(keyword) {
-        return !!this.getKeywordValue(keyword);
+        return this.keywords.includes(keyword);
     }
 
-    getKeywordValue(keyword) {
-        keyword = keyword.toLowerCase();
-        if(this.getEffects('removeKeyword').includes(keyword)) {
-            return 0;
-        }
-
-        return this.getEffects('addKeyword').reduce((total, keywords) => total + (keywords[keyword] ? keywords[keyword] : 0), 0);
+    getToken(token) {
+        return this.hasToken(token) ? this.tokens[token] : 0; 
     }
 
     createSnapshot() {
@@ -658,7 +630,7 @@ class Card extends EffectSource {
             printedFaction: this.printedFaction,
             mana: this.mana,
             stunned: this.stunned,
-            guardian: !!this.getKeywordValue('guardian'),
+            guardian: this.hasKeyword('Guardian'),
             tokens: this.tokens,
             type: this.getType(),
             uuid: this.uuid

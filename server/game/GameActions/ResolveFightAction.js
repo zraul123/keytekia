@@ -32,21 +32,21 @@ class ResolveFightAction extends CardGameAction {
         };
         return super.createEvent('onFight', params, event => {
             let damageEvents = [];
+
             let defenderAmount = event.card.power;
             if(event.card.anyEffect('limitFightDamage')) {
                 defenderAmount = Math.min(defenderAmount, ...event.card.getEffects('limitFightDamage'));
             }
-
             let defenderParams = {
                 amount: defenderAmount,
                 fightEvent: event,
                 damageSource: event.card
             };
+
             let attackerAmount = event.attacker.power + event.attacker.getBonusDamage(event.attackerTarget);
             if(event.attacker.anyEffect('limitFightDamage')) {
                 attackerAmount = Math.min(attackerAmount, ...event.attacker.getEffects('limitFightDamage'));
             }
-
             let attackerParams = {
                 amount: attackerAmount,
                 fightEvent: event,
@@ -54,7 +54,7 @@ class ResolveFightAction extends CardGameAction {
             };
 
             if (event.card.type === 'player') {
-                event.card.owner.health -= attackerParams.amount;
+                context.game.actions.dealDamageToPlayer({amount: attackerParams.amount, target: event.card.owner})
             }
 
             if(!event.card.getKeywordValue('elusive') || event.card.elusiveUsed || event.attacker.ignores('elusive')) {
