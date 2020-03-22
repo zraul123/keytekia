@@ -1,10 +1,24 @@
 const Card = require('../../Card.js');
 
 class RageboundSage extends Card {
-    setupCardAbilities() {
-
+    setupCardAbilities(ability) {
+        this.constantReaction({
+            when: {
+                onDrawCards: (event, context) => event.player === context.player
+            },
+            gameAction: [
+                ability.actions.dealDamageToPlayer(context => ({
+                    amount: 1,
+                    target: context.player.opponent
+                })),
+                ability.actions.dealDamageToPlayer(context => ({
+                    amount: 1,
+                    target: context.player
+                }))]
+        });
     }
 }
+// onDrawCards
 
 RageboundSage.id = 'rageboundsage';
 

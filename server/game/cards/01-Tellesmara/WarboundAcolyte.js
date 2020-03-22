@@ -2,10 +2,7 @@ const Card = require('../../Card.js');
 
 class WarboundAcolyte extends Card {
     setupCardAbilities(ability) {
-        this.reaction({
-            when: {
-                // todo: onAttack() => {}
-            },
+        this.fight({
             gameAction: [
                 ability.actions.draw({ amount: 2 }),
                 ability.actions.discard(context => ({

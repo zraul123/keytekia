@@ -1,7 +1,14 @@
 const Card = require('../../Card.js');
 
 class WanderingServant extends Card {
-    setupCardAbilities() {
+    setupCardAbilities(ability) {
+        this.play({
+            target: {
+                cardType: 'unit',
+                controller: 'self',
+                gameAction: ability.actions.ready()
+            }
+        })
     }
 }
 

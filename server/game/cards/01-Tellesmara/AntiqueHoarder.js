@@ -2,10 +2,7 @@ const Card = require('../../Card.js');
 
 class AntiqueHoarder extends Card {
     setupCardAbilities(ability) {
-        this.reaction({
-            when: {
-                // todo: OnAttack: (event => event.card.type)
-            },
+        this.fight({
             gameAction: ability.actions.dealDamage({ amount: 1 })
         });
     }

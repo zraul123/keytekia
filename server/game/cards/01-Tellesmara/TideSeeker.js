@@ -9,9 +9,7 @@ class TideSeeker extends Card {
                 controller: 'self',
                 gameAction: ability.actions.exhaust()
             },
-            then: {
-                gameAction: ability.actions.draw()
-            }
+            gameAction: ability.actions.draw({amount: 1})
         });
     }
 }

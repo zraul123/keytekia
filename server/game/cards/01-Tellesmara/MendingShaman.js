@@ -2,11 +2,11 @@ const Card = require('../../Card.js');
 
 class MendingShaman extends Card {
     setupCardAbilities(ability) {
-        this.reaction({
+        this.constantReaction({
             when: {
-                onCardPlayed: event => event.card.type === 'spell'
+                onCardPlayed: (event, context) => event.card.type === 'spell' && event.player === context.player
             },
-            gameAction: ability.actions.heal({ fully: true })
+            gameAction: ability.actions.heal()
         });
     }
 }

@@ -2,18 +2,12 @@ const Card = require('../../Card.js');
 
 class Aetherwalker extends Card {
     setupCardAbilities(ability) {
-        this.reaction({
-            when: {
-                // todo: OnAttack
-                // When Aetherwalker attacks
-            },
+        this.play({
             gameAction: [
-                ability.actions.draw(),
-                ability.actions.discard(context => ({
-                    target: context.player.hand
-                }))
+                ability.actions.draw({ amount: 1 }),
+                ability.actions.chosenDiscard({ amount: 1, controller: 'self'})
             ]
-        });
+        })
     }
 }
 

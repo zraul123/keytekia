@@ -3,10 +3,15 @@ const Card = require('../../Card.js');
 class Absolution extends Card {
     setupCardAbilities(ability) {
         this.play({
-            gameAction: ability.actions.dealDamage(context => ({
+            gameAction: [
+                ability.actions.dealDamage(context => ({
                 amount: 3,
-                target: context.player.opponent.creaturesInPlay // TODO: Add own creatures too
-            }))
+                target: context.player.opponent.creaturesInPlay
+            })),
+                ability.actions.dealDamage(context => ({
+                amount: 3,
+                target: context.player.creaturesInPlay
+            }))]
         });
     }
 }
