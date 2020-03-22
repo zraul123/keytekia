@@ -43,7 +43,7 @@ class DealDamageAction extends CardGameAction {
             damageSource: this.damageSource,
             damageType: this.damageType,
             destroyed: false,
-            attackEvent: this.attackEvent,
+            attackEvent: this.attackEvent
         };
 
 
@@ -55,7 +55,7 @@ class DealDamageAction extends CardGameAction {
             }
 
             if (event.damageSource && typeof event.damageSource.hasKeyword === 'function') {
-                if (event.damageSource.hasKeyword("Overtake")) {
+                if (event.damageSource.hasKeyword('Overtake')) {
                     let remainingHealth = event.card.health - event.card.getToken('damage');
                     let damageOverflow = amount - remainingHealth;
                     if (damageOverflow > 0) {
@@ -65,14 +65,6 @@ class DealDamageAction extends CardGameAction {
             }
 
             event.card.addToken('damage', amount);
-            if(!event.card.moribund && !this.noGameStateCheck && (event.card.tokens.damage >= event.card.power || event.damageSource && event.damageSource.getKeywordValue('poison'))) {
-                event.addSubEvent(context.game.actions.destroy({ inFight: !!event.attackEvent, purge: this.purge }).getEvent(event.card, context.game.getFrameworkContext()));
-                if(event.attackEvent) {
-                    event.attackEvent.destroyed.push(event.card);
-                }
-
-                event.destroyed = true;
-            }
         });
     }
 }

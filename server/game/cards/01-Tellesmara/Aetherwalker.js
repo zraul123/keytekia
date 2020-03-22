@@ -4,7 +4,7 @@ class Aetherwalker extends Card {
     setupCardAbilities(ability) {
         this.attack({
             gameAction: [
-                ability.actions.draw({ amount: 1 }),
+                ability.actions.draw((context) => ({ amount: 1, target: context.player })),
                 ability.actions.chosenDiscard({ amount: 1, controller: 'self' })
             ]
         });

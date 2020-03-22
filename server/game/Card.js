@@ -190,11 +190,10 @@ class Card extends EffectSource {
     }
 
     reaction(properties) {
-        if(properties.play || properties.fight || properties.reap) {
+        if(properties.play || properties.attack) {
             properties.when = {
                 onCardPlayed: (event, context) => event.card === context.source,
                 onAttack: (event, context) => event.attacker === context.source,
-                onReap: (event, context) => event.card === context.source
             };
         }
 

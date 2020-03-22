@@ -56,7 +56,7 @@ class Player extends GameObject {
     }
 
     get guardians() {
-        return this.cardsInPlay.filter(card => card.hasKeyword("Guardian"));
+        return this.cardsInPlay.filter(card => card.hasKeyword('Guardian'));
     }
 
     hasEnoughMana(mana) {
