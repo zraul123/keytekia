@@ -11,6 +11,14 @@ class LightningStorm extends Card {
                 ability.actions.dealDamageToPlayer(context => ({
                     amount: 1,
                     target: context.player.opponent
+                })),
+                ability.actions.dealDamage(context => ({
+                    amount: 1,
+                    target: context.player.creaturesInPlay
+                })),
+                ability.actions.dealDamageToPlayer(context => ({
+                    amount: 1,
+                    target: context.player
                 }))
             ]
         })

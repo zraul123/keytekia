@@ -1,7 +1,13 @@
 const Card = require('../../Card.js');
 
 class Consideration extends Card {
-    setupCardAbilities() {
+    setupCardAbilities(ability) {
+        this.play({
+            gameAction: [
+                ability.actions.draw({ amount: 1 }),
+                ability.actions.chosenDiscard({ amount: 1, controller: 'self'})
+            ]
+        })
     }
 }
 
