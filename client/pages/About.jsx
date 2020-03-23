@@ -17,7 +17,7 @@ class About extends React.Component {
                     <Trans i18nKey='about.whatisthis'>
                         <h3>What is this?</h3>
 
-                        <p>This site was setup to allow you to play Manacrest, a Unique Deck Game in your browser.</p>
+                        <p>This site was setup to allow you to play Manacrest in your browser.</p>
                     </Trans>
                     <Trans i18nKey='about.cool'>
                         <h3>That&apos;s pretty cool!  But how does any of this work?</h3>
