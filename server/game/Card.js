@@ -582,6 +582,8 @@ class Card extends EffectSource {
             printedFaction: this.printedFaction,
             mana: this.mana,
             stunned: this.stunned,
+            health: this.health,
+            extraPower: this.sumEffects('modifyPower') + (this.hasToken('power') ? this.tokens.power : 0),
             guardian: this.hasKeyword('Guardian'),
             tokens: this.tokens,
             type: this.getType(),

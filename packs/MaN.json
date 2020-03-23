@@ -8,10 +8,10 @@
   "releaseDate": "2019-15-03",
   "cards": [
     {
-      "id": "abberationoftruth",
+      "id": "aberrationoftruth",
       "name": "Abberation of Truth",
       "number": "001",
-      "image": "abberationoftruth.png",
+      "image": "aberrationoftruth.png",
       "expansion": 0,
       "faction": "alchemist",
       "keywords": [],

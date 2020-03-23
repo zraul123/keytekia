@@ -15,7 +15,7 @@ class Player extends GameObject {
         this.id = id;
         this.owner = owner;
 
-        this.health = 25;
+        this.playerHealth = 25;
         this.mana = 5;
         this.hand = [];
         this.cardsInPlay = []; // This stores references to all creatures and artifacts in play.  Upgrades are not stored here.
@@ -57,6 +57,16 @@ class Player extends GameObject {
 
     get guardians() {
         return this.cardsInPlay.filter(card => card.hasKeyword('Guardian'));
+    }
+
+    get health() {
+        return this.playerHealth;
+    }
+
+    set health(newValue) {
+        this.playerHealth = newValue;
+        if (this.playerCard)
+            this.playerCard.health = newValue;
     }
 
     hasEnoughMana(mana) {
