@@ -4,10 +4,10 @@ class Mindbolt extends Card {
     setupCardAbilities(ability) {
         this.play({
             gameAction: ability.actions.dealDamageToPlayer(context => ({
-                    amount: context.player.hand.length + 1,
+                    amount: context.player.hand.length,
                     target: context.player.opponent
                 }))
-        })
+        });
     }
 }
 

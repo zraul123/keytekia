@@ -50,13 +50,6 @@ class ActionWindow extends UiPrompt {
         if(this.game.endPhaseRightNow) {
             this.game.endPhaseRightNow = false;
             this.complete();
-            return;
-        }
-
-        let omegaCard = this.game.cardsPlayed.find(card => card.hasKeyword('omega'));
-        if(omegaCard) {
-            this.game.addMessage('{0} played {1} which has Omega, ending this step', this.game.activePlayer, omegaCard);
-            this.complete();
         }
     }
 
@@ -94,7 +87,7 @@ class ActionWindow extends UiPrompt {
 
         if(choice === 'done') {
             let cards = player.cardsInPlay.concat(player.hand);
-            if(cards.some(card => card.getLegalActions(player).length > 0)) {
+            if(cards.some(card => card.getLegalActions(player).length > 0) && player.hand.length <= 7) {
                 this.game.promptWithHandlerMenu(player, {
                     source: 'End Turn',
                     activePromptTitle: 'Are you sure you want to end your turn?',
@@ -104,6 +97,25 @@ class ActionWindow extends UiPrompt {
                         () => true
                     ]
                 });
+            } else if(player.hand.length > 7) {
+                const discardAmount = this.game.activePlayer.hand.length - 7;
+                const context = this.game.getFrameworkContext(player);
+
+                this.game.promptForSelect(player, {
+                    activePromptTitle: (discardAmount === 1) ? 'Choose a card to discard' : { text: 'Choose {{amount}} cards to discard', values: { amount: discardAmount } },
+                    mode: 'exactly',
+                    source: 'Discard to Max Hand Size',
+                    numCards: discardAmount,
+                    location: 'hand',
+                    controller: player,
+                    onSelect: (player, cards) => {
+                        context.game.addMessage('{0} discards {1}', player, cards);
+                        context.game.actions.discard().resolve(cards, context);
+                        return true;
+                    }
+                });
+
+                this.complete();
             } else {
                 this.complete();
             }

@@ -6,7 +6,9 @@ class FarseerWarlock extends Card {
             when: {
                 onDrawCards: (event, context) => event.player === context.player
             },
-            gameAction: ability.effects.modifyPower(1),
+            gameAction: ability.actions.forRemainderOfTurn(() => ({
+                effect: ability.effects.modifyPower(1)
+            })),
             effect: 'get +1 power this turn'
         });
     }
