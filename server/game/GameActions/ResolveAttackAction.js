@@ -13,7 +13,7 @@ class ResolveAttackAction extends CardGameAction {
             return false;
         } else if(!this.attacker.checkRestrictions('attack') || card.controller === this.attacker.controller) {
             return false;
-        } else if(card.controller.guardians.length > 0 && !card.controller.guardians.includes(card)) {
+        } else if(this.attacker.owner !== card.controller && card.controller.guardians.length > 0 && !card.controller.guardians.includes(card)) {
             return false;
         } else if(!card.exhausted && card.id !== 'player') {
             return false;

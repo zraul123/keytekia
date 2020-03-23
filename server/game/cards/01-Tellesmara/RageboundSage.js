@@ -10,15 +10,10 @@ class RageboundSage extends Card {
                 ability.actions.dealDamageToPlayer(context => ({
                     amount: 1,
                     target: context.player.opponent
-                })),
-                ability.actions.dealDamageToPlayer(context => ({
-                    amount: 1,
-                    target: context.player
                 }))]
         });
     }
 }
-// onDrawCards
 
 RageboundSage.id = 'rageboundsage';
 
