@@ -3,7 +3,7 @@ const CardGameAction = require('./CardGameAction');
 class DealDamageAction extends CardGameAction {
     setDefaultProperties() {
         this.amount = null;
-        this.amountForCard = () => 1;
+        this.amountForCard = () => 0;
         this.attackEvent = null;
         this.damageSource = null;
         this.damageType = 'card effect';
@@ -50,15 +50,15 @@ class DealDamageAction extends CardGameAction {
         return super.createEvent('onDamageDealt', params, event => {
             let amount = event.amount;
 
-            if(amount === 0) {
+            if(!amount) {
                 return;
             }
 
-            if (event.damageSource && typeof event.damageSource.hasKeyword === 'function') {
-                if (event.damageSource.hasKeyword('Overtake')) {
+            if(event.damageSource && typeof event.damageSource.hasKeyword === 'function') {
+                if(event.damageSource.hasKeyword('Overtake')) {
                     let remainingHealth = event.card.health - event.card.getToken('damage');
                     let damageOverflow = amount - remainingHealth;
-                    if (damageOverflow > 0) {
+                    if(damageOverflow > 0) {
                         event.card.owner.health -= damageOverflow;
                     }
                 }

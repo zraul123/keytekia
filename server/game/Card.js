@@ -146,10 +146,6 @@ class Card extends EffectSource {
         return this.reaction(Object.assign({ attack: true, name: 'Attack' }, properties));
     }
 
-    fight(properties) {
-        return this.reaction(Object.assign({ fight: true, name: 'Fight' }, properties));
-    }
-
     destroyed(properties) {
         return this.interrupt(Object.assign({ when: { onCardDestroyed: (event, context) => event.card === context.source } }, properties));
     }
@@ -165,11 +161,6 @@ class Card extends EffectSource {
         }
 
         return action;
-    }
-
-
-    beforeFight(properties) {
-        return this.interrupt(Object.assign({ when: { onFight: (event, context) => event.attacker === context.source } }, properties));
     }
 
     beforeAttack(properties) {
@@ -193,7 +184,7 @@ class Card extends EffectSource {
         if(properties.play || properties.attack) {
             properties.when = {
                 onCardPlayed: (event, context) => event.card === context.source,
-                onAttack: (event, context) => event.attacker === context.source,
+                onAttack: (event, context) => event.attacker === context.source
             };
         }
 

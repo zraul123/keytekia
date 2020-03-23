@@ -16,10 +16,10 @@ class DealDamageToPlayerAction extends PlayerAction {
     }
 
     getEvent(player, context) {
-        return super.createEvent('onLoseHealth', { 
-            player: player, 
-            amount: this.amount, 
-            context: context 
+        return super.createEvent('onLoseHealth', {
+            player: player,
+            amount: this.amount,
+            context: context
         }, event => event.player.dealDamage(event.amount)
         );
     }

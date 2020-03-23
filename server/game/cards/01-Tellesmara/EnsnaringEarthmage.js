@@ -1,17 +1,20 @@
 const Card = require('../../Card.js');
 
-class BurnAlive extends Card {
+class EnsnaringEarthmage extends Card {
     setupCardAbilities(ability) {
         this.attack({
             target: {
+                activePromptTitle: 'Chose a unit to exhaust.',
                 cardType: 'unit',
-                gameAction: ability.actions.exhaust()
+                gameAction: [
+                    ability.actions.exhaust()
+                ]
             }
         });
     }
 }
 
-BurnAlive.id = 'burnalive';
+EnsnaringEarthmage.id = 'ensnaringearthmage';
 
-module.exports = BurnAlive;
+module.exports = EnsnaringEarthmage;
 

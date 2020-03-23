@@ -101,14 +101,9 @@ class PlayerRow extends React.Component {
         let discard = (<CardPile className='discard' title={t('Discard')} source='discard' cards={this.props.discard}
                                  {...cardPileProps} />);
 
-        let identity = <IdentityCard className='identity' deckListUrl={this.state.deckListUrl}
-                                     size={this.props.cardSize} onMouseOut={this.props.onMouseOut}
-                                     onMouseOver={this.props.onMouseOver}/>;
-
         return (
             <div className='player-home-row-container'>
                 {this.renderDroppablePile('hand', hand)}
-                {identity}
                 {this.renderDroppablePile('deck', drawDeck)}
                 {this.renderDroppablePile('discard', discard)}
             </div>

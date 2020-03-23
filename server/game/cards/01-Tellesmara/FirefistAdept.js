@@ -13,7 +13,7 @@ class FirefistAdept extends Card {
                     target: context.player
                 }))
             ]
-        })
+        });
     }
 }
 

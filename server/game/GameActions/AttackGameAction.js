@@ -20,14 +20,8 @@ class AttackGameAction extends CardGameAction {
 
     getEvent(card, context) {
         return super.createEvent('onInitiateAttack', { card, context }, () => {
-            let newContext;
-            if(card.stunned) {
-                let removeStunAction = card.getActions().find(action => action.title === 'Remove this creature\'s stun');
-                newContext = removeStunAction.createContext(context.player);
-            } else {
-                let attackAction = card.getAttackAction();
-                newContext = attackAction.createContext(context.player);
-            }
+            let attackAction = card.getAttackAction();
+            let newContext = attackAction.createContext(context.player);
 
             newContext.canCancel = false;
             context.game.resolveAbility(newContext);

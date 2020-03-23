@@ -3,7 +3,7 @@ const CardGameAction = require('./CardGameAction');
 class ExhaustAction extends CardGameAction {
     setup() {
         this.name = 'exhaust';
-        this.targetType = ['creature', 'artifact'];
+        this.targetType = ['unit', 'relic'];
         this.effectMsg = 'exhaust {0}';
     }
 

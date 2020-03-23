@@ -2,14 +2,19 @@ const Card = require('../../Card.js');
 
 class TideSeeker extends Card {
     setupCardAbilities(ability) {
-        this.play({
-            effect: 'exhaust a unit you control, draw 1 card',
+        this.constantReaction({
+            when: {
+                onCardEntersPlay: (event, context) => event.card === context.source
+            },
             target: {
                 cardType: 'unit',
                 controller: 'self',
-                gameAction: ability.actions.exhaust()
+                gameAction: ability.actions.sequential([
+                    ability.actions.exhaust(),
+                    ability.actions.draw((context) => ({ amount: 1, target: context.player }))
+                ])
             },
-            gameAction: ability.actions.draw({amount: 1})
+            effect: 'exhaust {0}. Draw a card.'
         });
     }
 }

@@ -474,7 +474,6 @@ class Player extends GameObject {
             'number': '-1',
             'image': 'player',
             'expansion': 0,
-            'house': 'player',
             'keywords': [],
             'traits': [
                 'mutant'

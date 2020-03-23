@@ -5,7 +5,7 @@ class Prepare extends Card {
         this.play({
             gameAction: [
                 ability.actions.chosenDiscard({ amount: 2, controller: 'self'}),
-                ability.actions.gainMana({amount: 3})
+                ability.actions.gainMana({ amount: 3 })
             ]
         });
     }

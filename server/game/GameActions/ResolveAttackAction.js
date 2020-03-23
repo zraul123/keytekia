@@ -3,7 +3,7 @@ const CardGameAction = require('./CardGameAction');
 class ResolveAttackAction extends CardGameAction {
     setup() {
         this.targetType = ['unit', 'player'];
-        this.effectMsg = '{1} to attack {0}';
+        this.effectMsg = 'to attack {0}';
         this.effectArgs = this.attacker;
         this.manaCost = 0;
     }
@@ -13,7 +13,7 @@ class ResolveAttackAction extends CardGameAction {
             return false;
         } else if(!this.attacker.checkRestrictions('attack') || card.controller === this.attacker.controller) {
             return false;
-        } else if(card.controller.guardians.length > 0 && !card.controller.guardians.includes(card)) {
+        } else if(card.controller.guardians.length > 0 && !card.controller.guardians.includes(card) && !card.exhausted) {
             return false;
         }
 
@@ -57,6 +57,7 @@ class ResolveAttackAction extends CardGameAction {
                 event.card.isFighting = false;
                 event.attacker.isFighting = false;
             }));
+
             event.card.isFighting = true;
             event.attacker.isFighting = true;
             context.game.checkGameState(true);

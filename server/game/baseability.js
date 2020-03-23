@@ -83,7 +83,9 @@ class BaseAbility {
         }
 
         for(let action of this.gameAction) {
-            action.reset();
+            if(action && action.reset) {
+                action.reset();
+            }
         }
 
         if(this.checkThenAbilities() || this.printedAbility && this.abilityType === 'action') {
