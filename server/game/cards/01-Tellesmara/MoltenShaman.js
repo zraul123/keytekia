@@ -2,17 +2,14 @@ const Card = require('../../Card.js');
 
 class MoltenShaman extends Card {
     setupCardAbilities(ability) {
-        this.reaction({
-            effect: 'Molten shaman gets +1 power this turn!',
+        this.constantReaction({
             when: {
-                onPhaseStarted: event => event.phase === 'main'
+                onCardPlayed: (event, context) => event.player === context.player && event.card.type === 'spell'
             },
-            gameAction: ability.actions.forRemainderOfTurn(context => ({
-                when: {
-                    onCardPlayed: event => event.card.type === 'spell' && context.player === event.player
-                },
+            gameAction: ability.actions.forRemainderOfTurn(() => ({
                 effect: ability.effects.modifyPower(1)
-            }))
+            })),
+            effect: 'get +1 power this turn.'
         });
     }
 }
