@@ -264,7 +264,7 @@ class NavBar extends React.Component {
                             { lobbyStatus }
                             { gameStatus }
                             { rightMenuToRender }
-                            { languageDropdown }
+                            {/*{ languageDropdown }*/}
                         </ul>
                     </div>
                 </div>
