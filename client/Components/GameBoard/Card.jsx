@@ -85,29 +85,18 @@ class InnerCard extends React.Component {
         }
     }
 
+    
     getCountersForCard(card) {
-        const singleValueCounters = ['ward', 'enrage'];
-        let counters = [];
-        let needsFade = card.type === 'upgrade' && !['full deck'].includes(this.props.source);
-
-        if(card.type === 'creature' && card.baseStrength !== card.strength) {
-            counters.push({ name: 'strength', count: card.strength, fade: needsFade, showValue: true });
+        let counters = []
+        if (card.id === 'player') {
+            counters.push({name: 'playerhealth', count: card.health, fade: true, showValue: true});
+        } else {
+            if (card.extraPower && card.extraPower > 0) {
+                counters.push({ name: 'power', count: card.extraPower, fade: true, showValue: true });
+            }
         }
 
-        for(const [key, token] of Object.entries(card.tokens || {})) {
-            counters.push({ name: key, count: token, fade: needsFade,
-                showValue: ((token > 1) || !singleValueCounters.includes(key)), broken: key === 'ward' && card.wardBroken });
-        }
-
-        if(card.pseudoDamage) {
-            counters.push({ name: 'damage', count: card.pseudoDamage, fade: true, showValue: true });
-        }
-
-        if(card.stunned) {
-            counters.push({ name: 'stun', count: 1, showValue: false });
-        }
-
-        return counters.filter(counter => counter.count >= 0);
+        return counters;
     }
 
     getCardDimensions() {
@@ -175,12 +164,8 @@ class InnerCard extends React.Component {
         return true;
     }
 
-    showCounters() {
-        if(['full deck'].includes(this.props.source)) {
-            return true;
-        }
-
-        if(this.props.source !== 'play area' && this.props.source !== 'faction') {
+    shouldShowCounters() {
+        if(this.props.source !== 'play area') {
             return false;
         }
 
@@ -253,7 +238,7 @@ class InnerCard extends React.Component {
                         <span className='card-name'>{ this.props.card.name }</span>
                         { image }
                     </div>
-                    { this.showCounters() ? <CardCounters counters={ this.getCountersForCard(this.props.card) } /> : null }
+                    { this.shouldShowCounters() ? <CardCounters counters={ this.getCountersForCard(this.props.card) } /> : null }  
                 </div>
                 { this.showMenu() ? <CardMenu menu={ this.props.card.menu } onMenuItemClick={ this.onMenuItemClick } /> : null }
             </div>);
