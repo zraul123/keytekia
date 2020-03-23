@@ -7,7 +7,7 @@ class TideTyrant extends Card {
                 cardType: 'unit',
                 gameAction: ability.actions.returnToHand()
             }
-        })
+        });
     }
 }
 

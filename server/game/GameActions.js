@@ -48,7 +48,6 @@ const Actions = {
     chosenDiscard: (propertyFactory) => new GameActions.ChosenDiscardAction(propertyFactory), // amount = 1
     discardAtRandom: (propertyFactory) => new GameActions.RandomDiscardAction(propertyFactory), // amount = 1
     draw: (propertyFactory) => new GameActions.DrawAction(propertyFactory), // amount = 1
-    forgeKey: (propertyFactory) => new GameActions.ForgeAction(propertyFactory), // modifier = 0
     forRemainderOfTurn: (propertyFactory) => new GameActions.LastingEffectAction(propertyFactory, 1),
     untilNextTurn: (propertyFactory) => new GameActions.LastingEffectAction(propertyFactory, 2),
     untilEndOfMyNextTurn: (propertyFactory) => new GameActions.LastingEffectAction(propertyFactory, 3),
@@ -58,7 +57,6 @@ const Actions = {
     search: (propertyFactory) => new GameActions.SearchAction(propertyFactory), // name
     shuffleDeck: (propertyFactory) => new GameActions.ShuffleDeckAction(propertyFactory), // name
     steal: (propertyFactory) => new GameActions.StealAction(propertyFactory), // amount = 1
-    transferAmber: (propertyFactory) => new GameActions.TransferAmberAction(propertyFactory), // amount = 1
     // meta actions
     addEventToWindow: (propertyFactory) => new GameActions.AddEventToWindowAction(propertyFactory),
     allocateDamage: (propertyFactory) => new GameActions.AllocateDamageAction(propertyFactory),

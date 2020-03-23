@@ -11,8 +11,7 @@ class PyromancersJoy extends Card {
                 cardType: 'unit',
                 gameAction: ability.actions.dealDamage({ amount: 3 })
             }
-        })
-
+        });
     }
 }
 

@@ -8,7 +8,7 @@ class Transmute extends Card {
                 controller: 'opponent',
                 gameAction: ability.actions.returnToHand()
             }
-        })
+        });
     }
 }
 

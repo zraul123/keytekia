@@ -2,7 +2,7 @@ const Card = require('../../Card.js');
 
 class AcolyteOfAggression extends Card {
     setupCardAbilities(ability) {
-        this.reaction({
+        this.constantReaction({
             effect: 'get +1 power this turn',
             when: {
                 onPhaseStarted: event => event.phase === 'main'

@@ -2,7 +2,7 @@ const Card = require('../../Card.js');
 
 class AntiqueHoarder extends Card {
     setupCardAbilities(ability) {
-        this.attack({
+        this.beforeAttack({
             target: {
                 activePromptTitle: 'Chose a unit to deal 1 damage.',
                 cardType: 'unit',

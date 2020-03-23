@@ -648,7 +648,7 @@ class Game extends EventEmitter {
         this.queueStep(new SupplyPhase(this));
         this.queueStep(new MainPhase(this));
         this.queueStep(new CleanupPhase(this));
-        this.queueStep(new SimpleStep(this, () => this.raiseEndRoundEvent())),
+        this.queueStep(new SimpleStep(this, () => this.raiseEndRoundEvent()));
         this.queueStep(new SimpleStep(this, () => this.beginRound()));
     }
 

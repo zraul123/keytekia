@@ -8,7 +8,7 @@ class WanderingServant extends Card {
                 controller: 'self',
                 gameAction: ability.actions.ready()
             }
-        })
+        });
     }
 }
 

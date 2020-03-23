@@ -5,7 +5,7 @@ class Amplification extends Card {
         this.play({
             gameAction: [
                 ability.actions.draw({ amount: 2 }),
-                ability.actions.chosenDiscard({ amount: 2, controller: 'self'})
+                ability.actions.chosenDiscard({ amount: 2, controller: 'self' })
             ]
         });
     }
