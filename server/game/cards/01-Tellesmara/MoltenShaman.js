@@ -3,6 +3,7 @@ const Card = require('../../Card.js');
 class MoltenShaman extends Card {
     setupCardAbilities(ability) {
         this.constantReaction({
+            match: this,
             when: {
                 onCardPlayed: (event, context) => event.player === context.player && event.card.type === 'spell'
             },

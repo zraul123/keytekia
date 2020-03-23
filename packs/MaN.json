@@ -19,8 +19,8 @@
       "type": "unit",
       "rarity": "Uncommon",
       "mana": 1,
-      "health": 1,
-      "power": 2,
+      "health": 2,
+      "power": 1,
       "text": "Destroyed: Draw 1 card.",
       "locale": {
         "de": {

@@ -5,10 +5,10 @@ class WarboundAcolyte extends Card {
         this.beforeAttack({
             gameAction: ability.actions.draw({ amount: 2 }),
             then: {
-                gameAction: ability.actions.discard(context => ({
-                    target: context.player.hand,
+                gameAction: ability.actions.chosenDiscard({
+                    controller: 'self',
                     amount: 3
-                }))
+                })
             }
         });
     }
