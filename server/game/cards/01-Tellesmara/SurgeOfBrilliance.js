@@ -10,7 +10,7 @@ class SurgeOfBrilliance extends Card {
                     target: context.player.opponent
                 }))
             ]
-        })
+        });
     }
 }
 

@@ -7,7 +7,7 @@ class HerosRecall extends Card {
                 cardType: 'unit',
                 gameAction: ability.actions.returnToHand()
             }
-        })
+        });
     }
 }
 

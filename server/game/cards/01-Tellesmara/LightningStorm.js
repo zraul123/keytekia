@@ -21,7 +21,7 @@ class LightningStorm extends Card {
                     target: context.player
                 }))
             ]
-        })
+        });
     }
 }
 

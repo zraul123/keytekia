@@ -7,7 +7,7 @@ class HeadmastersScorn extends Card {
                 cardType: 'unit',
                 gameAction: ability.actions.destroy()
             }
-        })
+        });
     }
 }
 

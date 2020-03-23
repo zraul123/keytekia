@@ -2,7 +2,7 @@ const Card = require('../../Card.js');
 
 class EnsnaringEarthmage extends Card {
     setupCardAbilities(ability) {
-        this.attack({
+        this.beforeAttack({
             target: {
                 activePromptTitle: 'Chose a unit to exhaust.',
                 cardType: 'unit',

@@ -8,7 +8,7 @@ class SteelResolve extends Card {
                 controller: 'self',
                 gameAction: ability.actions.heal({ fully: true })
             }
-        })
+        });
     }
 }
 

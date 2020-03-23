@@ -6,7 +6,7 @@ class WallOfAether extends Card {
             when: {
                 onCardPlayed: (event, context) => event.card.type === 'spell' && event.player === context.player
             },
-            gameAction: (context) => ability.actions.heal({ fully: true })
+            gameAction: () => ability.actions.heal({ fully: true })
         });
     }
 }

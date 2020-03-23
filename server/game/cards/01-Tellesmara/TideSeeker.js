@@ -7,6 +7,7 @@ class TideSeeker extends Card {
                 onCardEntersPlay: (event, context) => event.card === context.source
             },
             target: {
+                activePromptTitle: 'Chose a unit to exhaust.',
                 cardType: 'unit',
                 controller: 'self',
                 gameAction: ability.actions.sequential([
