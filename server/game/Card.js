@@ -400,8 +400,7 @@ class Card extends EffectSource {
     }
 
     getPower() {
-        var modifyPowerEffect = (this.sumEffects('modifyPower') / this.owner.cardsInPlay.filter(card => card.id === this.id).length);
-        return this.printedPower + modifyPowerEffect + (this.hasToken('power') ? this.tokens.power : 0);
+        return this.printedPower + this.getExtraPower();
     }
 
     getBonusDamage(target) {
@@ -548,6 +547,12 @@ class Card extends EffectSource {
         return result;
     }
 
+    getExtraPower() {
+        var allUnits = this.owner.cardsInPlay.filter(card => card.id === this.id).length
+        var unitExtraPower = Math.ceil(this.sumEffects('modifyPower') / allUnits);
+        return unitExtraPower + (this.hasToken('power') ? this.tokens.power : 0)
+    }
+
     getSummary(activePlayer, hideWhenFaceup) {
         let isController = activePlayer === this.controller;
         let selectionState = activePlayer.getCardSelectionState(this);
@@ -584,7 +589,8 @@ class Card extends EffectSource {
             mana: this.mana,
             stunned: this.stunned,
             health: this.health,
-            extraPower: (this.sumEffects('modifyPower') / this.owner.cardsInPlay.filter(card => card.id === this.id).length) + (this.hasToken('power') ? this.tokens.power : 0),
+            extraPower: this.getExtraPower(),
+            resting: this.resting,
             guardian: this.hasKeyword('Guardian'),
             tokens: this.tokens,
             type: this.getType(),

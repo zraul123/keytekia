@@ -165,11 +165,19 @@ class InnerCard extends React.Component {
     }
 
     shouldShowCounters() {
+        if (this.props.card.type === 'player') {
+            return true;
+        }
+
         if(this.props.source !== 'play area') {
             return false;
         }
 
-        if(this.props.card.facedown || this.props.card.type === 'upgrade') {
+        if(this.props.card.facedown) {
+            return false;
+        }
+
+        if (this.props.card.resting) {
             return false;
         }
 
