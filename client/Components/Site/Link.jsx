@@ -18,7 +18,11 @@ class InnerLink extends React.Component {
 
     onClick(event) {
         event.preventDefault();
-        this.props.navigate(this.props.href);
+        if(this.props.href.startsWith('http')) {
+            window.open(this.props.href, '_blank');
+        } else {
+            this.props.navigate(this.props.href);
+        }
     }
 
     render() {
