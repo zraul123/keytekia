@@ -6,6 +6,8 @@ const moment = require('moment');
 const _ = require('underscore');
 const sendgrid = require('@sendgrid/mail');
 const fs = require('fs');
+const uuid = require('uuid');
+const monk = require('monk');
 
 const logger = require('../log.js');
 const { wrapAsync } = require('../util.js');
@@ -13,14 +15,108 @@ const UserService = require('../services/UserService');
 const ConfigService = require('../services/ConfigService');
 const BanlistService = require('../services/BanlistService');
 const PatreonService = require('../services/PatreonService');
+const DeckBuilderService = require('../services/DeckBuilderService');
 const util = require('../util.js');
 
 let configService = new ConfigService();
+let deckBuilderService;
 let userService;
 let banlistService;
 let patreonService;
 
 const appName = configService.getValueForSection('lobby', 'appName');
+
+const starterDeck = {
+    cardback: './img/cards/cardback.png',
+    cards: [
+        {
+            count: 3,
+            id: 'aberrationoftruth'
+        },
+        {
+            count: 3,
+            id: 'antiquehoarder'
+        },
+        {
+            count: 1,
+            id: 'chaosstorm'
+        },
+        {
+            count: 3,
+            id: 'combust'
+        },
+        {
+            count: 3,
+            id: 'collectthoughts'
+        },
+        {
+            count: 3,
+            id: 'ensnaringearthmage'
+        },
+        {
+            count: 1,
+            id: 'headmastersscorn'
+        },
+        {
+            count: 3,
+            id: 'overgrownhomunculus'
+        },
+        {
+            count: 2,
+            id: 'pyromancersjoy'
+        },
+        {
+            count: 1,
+            id: 'seekerofforbiddentruth'
+        },
+        {
+            count: 2,
+            id: 'servantofthelibrary'
+        },
+        {
+            count: 1,
+            id: 'surgeofbrilliance'
+        },
+        {
+            count: 2,
+            id: 'tidetyrant'
+        },
+        {
+            count: 2,
+            id: 'wallofaether'
+        },
+        {
+            count: 3,
+            id: 'transmute'
+        },
+        {
+            count: 3,
+            id: 'wanderingguardmage'
+        },
+        {
+            count: 3,
+            id: 'wanderingservant'
+        },
+        {
+            count: 2,
+            id: 'warboundacolyte'
+        },
+        {
+            count: 3,
+            id: 'libraryvigil'
+        },
+        {
+            count: 3,
+            id: 'darkestnight'
+        }
+
+    ],
+    expansion: 0,
+    factions: ['alchemist'],
+    total: 45,
+    username: '',
+    uuid: ''
+};
 
 function verifyPassword(password, dbPassword) {
     return new Promise((resolve, reject) => {
@@ -32,6 +128,18 @@ function verifyPassword(password, dbPassword) {
             return resolve(valid);
         });
     });
+}
+
+async function createStarterDeck(user) {
+    let introDeck = Object.assign({}, starterDeck);
+    introDeck.uuid = uuid();
+    introDeck.name = 'Starter Deck: Alchemist';
+    deckBuilderService.buildingDecks[user.username] = introDeck;
+    try {
+        return deckBuilderService.saveDeck(user.username, 'Starter Deck: Alchemist');
+    } catch(err) {
+        logger.error('Unable to create starter deck', err);
+    }
 }
 
 async function sendEmail(address, subject, email) {
@@ -119,7 +227,10 @@ async function downloadAvatar(user) {
 }
 
 module.exports.init = function(server, options) {
+    let db = monk(configService.getValue('dbPath'));
+
     userService = options.userService || new UserService(options.db, options.configService);
+    deckBuilderService = new DeckBuilderService(db);
     banlistService = new BanlistService(options.db, configService);
     patreonService = new PatreonService(configService.getValueForSection('lobby', 'patreonClientId'),
         configService.getValueForSection('lobby', 'patreonSecret'), userService,
@@ -248,6 +359,10 @@ module.exports.init = function(server, options) {
         }
 
         res.send({ success: true });
+
+        if(user) {
+            createStarterDeck(newUser);
+        }
 
         try {
             await downloadAvatar(user);
