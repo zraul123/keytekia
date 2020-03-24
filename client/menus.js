@@ -2,10 +2,10 @@ const menus = [
     { path: '/login', title: 'Login', showOnlyWhenLoggedOut: true, position: 'right' },
     { path: '/register', title: 'Register', showOnlyWhenLoggedOut: true, position: 'right' },
     { path: '/decks', title: 'Decks', showOnlyWhenLoggedIn: true, position: 'left' },
-    { path: '/decks/build', title: 'Build deck', showOnlyWhenLoggedIn: true, position: 'left' },
+    { path: '/decks/build', title: 'New Deck', showOnlyWhenLoggedIn: true, position: 'left' },
     { path: '/matches', title: 'Matches', showOnlyWhenLoggedIn: true, position: 'left' },
     { path: '/play', title: 'Play', position: 'left' },
-    { path: 'http://reddit.com/r/Manacrest', showOnlyWhenLoggedIn: true, title: 'Ideas/Suggestions', position: 'left' },
+    { path: 'http://reddit.com/r/Manacrest', showOnlyWhenLoggedIn: true, title: 'Feedback', position: 'left' },
     { path: 'http://patreon.com/Manacrest', showOnlyWhenLoggedIn: true, title: 'Donate', position: 'left' },
     {
         title: 'Help', position: 'left', childItems: [
