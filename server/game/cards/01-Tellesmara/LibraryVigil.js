@@ -3,7 +3,10 @@ const Card = require('../../Card.js');
 class LibraryVigil extends Card {
     setupCardAbilities(ability) {
         this.destroyed({
-            gameAction: ability.actions.draw((context) => ({ amount: 2, target: context.player })),
+            effect: 'draw 2 cards',
+            gameAction: ability.actions.draw({
+                amount: 2
+            })
         });
     }
 }

@@ -12,7 +12,7 @@ class DealOvertakeDamageAction extends CardGameAction {
     setup() {
         this.targetType = ['unit'];
         this.name = 'damage';
-        this.effectMsg = 'deal ' + this.amount + 'damage to {0}';
+        this.effectMsg = 'deal ' + this.amount + ' damage to {0}';
     }
 
     canAffect(card, context) {
