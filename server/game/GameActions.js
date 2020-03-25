@@ -2,6 +2,7 @@ const GameActions = require('./GameActions/index');
 
 const Actions = {
     // card actions
+    addTemporaryToken: (propertyFactory) => new GameActions.AddTemporaryTokenAction(propertyFactory),
     archive: (propertyFactory) => new GameActions.ArchiveAction(propertyFactory),
     attach: (propertyFactory) => new GameActions.AttachAction(propertyFactory), // upgrade
     capture: (propertyFactory) => new GameActions.CaptureAction(propertyFactory),

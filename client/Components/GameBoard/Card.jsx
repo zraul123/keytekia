@@ -94,6 +94,9 @@ class InnerCard extends React.Component {
             if (card.extraPower && card.extraPower > 0) {
                 counters.push({ name: 'power', count: card.extraPower, fade: true, showValue: true });
             }
+            if (card.tokens.damage && card.tokens.damage > 0) {
+                counters.push({ name: 'damage', count: card.tokens.damage, fade: true, showValue: true});
+            }
         }
 
         return counters;
@@ -174,10 +177,6 @@ class InnerCard extends React.Component {
         }
 
         if(this.props.card.facedown) {
-            return false;
-        }
-
-        if (this.props.card.resting) {
             return false;
         }
 

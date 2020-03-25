@@ -47,6 +47,7 @@ class Card extends EffectSource {
         this.stunned = false;
         this.isAttacking = false;
         this.resting = true;
+        this.temporaryTokens = [];
 
         this.locale = cardData.locale;
 
@@ -248,8 +249,8 @@ class Card extends EffectSource {
     }
 
     endRound() {
-        this.tokens['additionalPower'] = 0;
-        this.tokens['additionalHealth'] = 0;
+        this.decrementTemporaryTokens();
+        this.removeExpiredTemporaryTokens();
     }
 
     updateAbilityEvents(from, to) {
@@ -400,7 +401,7 @@ class Card extends EffectSource {
     }
 
     getPower() {
-        return this.printedPower + this.getExtraPower();
+        return this.printedPower + this.getTotalTemporaryTokens('power');
     }
 
     getBonusDamage(target) {
@@ -547,10 +548,27 @@ class Card extends EffectSource {
         return result;
     }
 
-    getExtraPower() {
-        var allUnits = this.owner.cardsInPlay.filter(card => card.id === this.id).length
-        var unitExtraPower = Math.ceil(this.sumEffects('modifyPower') / allUnits);
-        return unitExtraPower + (this.hasToken('power') ? this.tokens.power : 0)
+    addTemporaryToken(tokenType, amount, turns) {
+        this.temporaryTokens.push({
+            token: tokenType,
+            amount: amount,
+            turns: turns
+        });
+    }
+
+    getTotalTemporaryTokens(tokenType) {
+        return this.temporaryTokens
+            .filter(temporaryToken => temporaryToken.token === tokenType)
+            .map(temporaryToken => temporaryToken.amount)
+            .reduce((total, currentValue) => total + currentValue, 0)
+    }
+
+    decrementTemporaryTokens() {
+        this.temporaryTokens = this.temporaryTokens.map(temporaryToken => temporaryToken.turns -= 1);
+    }
+
+    removeExpiredTemporaryTokens() {
+        this.temporaryTokens = this.temporaryTokens.filter(temporaryToken => temporaryToken.turns <= 0);
     }
 
     getSummary(activePlayer, hideWhenFaceup) {
@@ -589,7 +607,7 @@ class Card extends EffectSource {
             mana: this.mana,
             stunned: this.stunned,
             health: this.health,
-            extraPower: this.getExtraPower(),
+            extraPower: this.getTotalTemporaryTokens('power'),
             resting: this.resting,
             guardian: this.hasKeyword('Guardian'),
             tokens: this.tokens,

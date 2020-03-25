@@ -1,4 +1,5 @@
 module.exports = {
+    AddTemporaryTokenAction: require('./AddTemporaryTokenAction'),
     AddEventToWindowAction: require('./AddEventToWindowAction'),
     AddTokenAction: require('./AddTokenAction'),
     AllocateDamageAction: require('./AllocateDamageAction'),
