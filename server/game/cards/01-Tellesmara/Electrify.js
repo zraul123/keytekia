@@ -6,11 +6,8 @@ class Electrify extends Card {
             target: {
                 cardType: 'unit',
                 gameAction: [
-                    ability.actions.dealDamage({ amount: 1 }),
-                    ability.actions.dealDamageToPlayer(context => ({
-                        amount: 1,
-                        target: context.player.opponent
-                    }))]
+                    ability.actions.dealDamage({ amount: 1 })
+                ]
             }
         });
     }

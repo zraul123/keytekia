@@ -6,7 +6,7 @@ class BurnAlive extends Card {
             target: {
                 activePromptTitle: 'Chose a unit to deal 5 damage.',
                 cardType: 'unit',
-                gameAction: ability.actions.dealDamage({ amount: 5 })
+                gameAction: ability.actions.dealOvertakeDamage({ amount: 5 })
             }
         });
     }
