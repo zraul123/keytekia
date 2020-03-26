@@ -9,7 +9,7 @@
   "cards": [
     {
       "id": "aberrationoftruth",
-      "name": "Abberation of Truth",
+      "name": "Aberration of Truth",
       "number": "001",
       "image": "aberrationoftruth.png",
       "expansion": 0,
@@ -24,7 +24,7 @@
       "text": "Destroyed: Draw 1 card.",
       "locale": {
         "en": {
-          "name": "Abberation of Truth"
+          "name": "Aberration of Truth"
         }
       }
     },
