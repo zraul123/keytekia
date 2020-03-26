@@ -52,9 +52,7 @@ class Card extends EffectSource {
         this.locale = cardData.locale;
 
         this.menu = [
-            { command: 'attack', text: 'Exhaust/Ready' },
-            { command: 'stun', text: 'Stun/Remove Stun' },
-            { command: 'control', text: 'Give control' }
+            { command: 'attack', text: 'Exhaust/Ready' }
         ];
 
         this.endRound();
@@ -295,10 +293,6 @@ class Card extends EffectSource {
 
         this.location = targetLocation;
 
-        if(['play area', 'discard', 'hand'].includes(targetLocation)) {
-            this.facedown = false;
-        }
-
         if(originalLocation !== targetLocation && this.type !== 'player') {
             this.updateAbilityEvents(originalLocation, targetLocation);
             this.updateEffects(originalLocation, targetLocation);
@@ -311,10 +305,6 @@ class Card extends EffectSource {
 
         if(!this.menu.length || !this.game.manualMode || this.location !== 'play area') {
             return undefined;
-        }
-
-        if(this.facedown) {
-            return [{ command: 'reveal', text: 'Reveal' }];
         }
 
         menu.push({ command: 'click', text: 'Select Card' });
@@ -598,7 +588,6 @@ class Card extends EffectSource {
             }),
             controlled: this.owner !== this.controller,
             exhausted: this.exhausted,
-            facedown: this.facedown,
             location: this.location,
             menu: this.getMenu(),
             name: this.cardData.name,

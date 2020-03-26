@@ -40,6 +40,17 @@ export function deleteDeck(deck) {
     };
 }
 
+export function editDeck(deck) {
+    return {
+        types: ['EDIT_DECK', 'DECK_EDITED'],
+        shouldCallAPI: () => true,
+        APIParams: {
+            url: `/api/decks/${deck._id}`,
+            type: 'PATCH'
+        }
+    };
+}
+
 export function saveDeck(deck) {
     let str = JSON.stringify({
         uuid: deck.uuid

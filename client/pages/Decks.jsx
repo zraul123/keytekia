@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 import AlertPanel from '../Components/Site/AlertPanel';
 import Panel from '../Components/Site/Panel';
-import Link from '../Components/Site/Link';
 import DeckList from '../Components/Decks/DeckList';
 import ViewDeck from '../Components/Decks/ViewDeck';
 import * as actions from '../actions';
@@ -47,13 +46,12 @@ class Decks extends React.Component {
             content = <AlertPanel type='error' message={ this.props.apiMessage } />;
         } else {
             content = (
-                <div className='full-height'>
+                <div>
                     <div className='col-xs-12'>
                         { successPanel }
                     </div>
                     <div className='col-md-12 full-height'>
                         <Panel title={ t('Your decks') }>
-                            <Link className='btn btn-primary' href='/decks/import'><Trans>Import Deck</Trans></Link>
                             <DeckList className='deck-list' activeDeck={ this.props.selectedDeck } decks={ this.props.decks } onSelectDeck={ this.props.selectDeck } />
                         </Panel>
                     </div>

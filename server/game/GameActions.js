@@ -34,7 +34,6 @@ const Actions = {
     removePowerCounter: (propertyFactory) => new GameActions.RemoveTokenAction(propertyFactory),
     removeStun: (propertyFactory) => new GameActions.RemoveStunAction(propertyFactory),
     removeWard: (propertyFactory) => new GameActions.RemoveWardAction(propertyFactory),
-    removeWardToken: (propertyFactory) => new GameActions.RemoveTokenAction(propertyFactory, 'ward'),
     resolveAbility: (propertyFactory) => new GameActions.ResolveAbilityAction(propertyFactory), // ability
     resolveFight: (propertyFactory) => new GameActions.ResolveFightAction(propertyFactory), // this shouldn't normally be needed
     returnMana: (propertyFactory) => new GameActions.ReturnManaAction(propertyFactory),

@@ -7,7 +7,6 @@ class GameObject {
         this.game = game;
         this.image = '';
         this.id = '';
-        this.facedown = false;
         this.uuid = uuid.v1();
         this.effects = [];
     }
@@ -93,7 +92,6 @@ class GameObject {
             image: this.image,
             label: this.name,
             name: this.name,
-            facedown: this.facedown,
             type: this.getType()
         };
     }

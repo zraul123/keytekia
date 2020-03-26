@@ -9,8 +9,8 @@ import CardImage from '../Components/GameBoard/CardImage';
 import * as actions from '../actions';
 
 export class Deckbuilder extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.cards = [];
         this.displayCards = [];
         this.selectedCards = [];
@@ -20,13 +20,14 @@ export class Deckbuilder extends React.Component {
 
         this.state = {
             deckName: '',
-            loadedCards: false
+            loadedCards: false,
+            isEditing: false
         };
     }
 
     componentDidMount() {
         this.props.loadCards().then(() => {
-            this.state.loadedCards = true
+            this.state.loadedCards = true;
             this.forceUpdate();
         });
         this.props.createDeckBuilder();
@@ -49,6 +50,15 @@ export class Deckbuilder extends React.Component {
       }
 
     render() {
+        if(this.state.isEditing) {
+            return (
+                <div>
+                    <h1>edit cat</h1>
+                    <span> edit deck coming soon!</span>
+                </div>
+            );
+        }
+
         return (
             <Panel title={'Deckbuilder'}>
                 <Panel title={'Available Cards'} className='deckbuilder-container available-cards-panel'>
@@ -58,9 +68,9 @@ export class Deckbuilder extends React.Component {
                     {this.getSelectedCards()}
                 </Panel>
                 <div className="deck-builder-settings">
-                    Deck name:&nbsp; <input type="text" value={this.state.value} onChange={this.handleChange} />   
+                    Deck name:&nbsp; <input type="text" value={this.state.value} onChange={this.handleChange} />
                     <button disabled={ this.total < 35 || this.total > 45 } onClick={this.saveButtonClicked} className="saveButton">Save</button>
-                </div> 
+                </div>
             </Panel>
         );
     }

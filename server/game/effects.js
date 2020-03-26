@@ -58,7 +58,6 @@ const Effects = {
     }),
     modifyHandSize: (amount) => EffectBuilder.player.flexible('modifyHandSize', amount),
     playerCannot: (type, condition) => EffectBuilder.player.static('abilityRestrictions', new CannotRestriction(type, condition)),
-    restrictHouseChoice: (house) => EffectBuilder.player.static('restrictHouseChoice', house),
     skipStep: (step) => EffectBuilder.player.static('skipStep', step)
 };
 

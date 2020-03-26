@@ -7,7 +7,6 @@ class PlaceUnderAction extends CardGameAction {
     }
 
     setDefaultProperties() {
-        this.facedown = false;
         this.parent = null;
     }
 
@@ -18,7 +17,7 @@ class PlaceUnderAction extends CardGameAction {
         if(this.isGraft) {
             this.effectMsg = 'graft {0} onto {1}';
         } else {
-            this.effectMsg = 'place ' + (this.facedown ? 'a card' : '{0}') + ' under {1}';
+            this.effectMsg = 'place a card under {1}';
         }
     }
 
@@ -32,7 +31,6 @@ class PlaceUnderAction extends CardGameAction {
             card.controller = card.owner;
             card.parent = this.parent;
             card.moveTo(this.isGraft ? 'grafted' : 'purged');
-            card.facedown = this.facedown;
             this.parent.childCards.push(card);
         });
     }

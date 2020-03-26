@@ -12,11 +12,17 @@ class ViewDeck extends React.Component {
         super();
 
         this.handleDeleteClick = this.handleDeleteClick.bind(this);
+        this.handleEditClick = this.handleEditClick.bind(this);
     }
 
     handleDeleteClick(event) {
         event.preventDefault();
         this.props.onDeleteDeck(this.props.deck);
+    }
+
+    handleEditClick(event) {
+        event.preventDefault();
+        this.setState({ deck: this.props.deck });
     }
 
     render() {
@@ -27,6 +33,7 @@ class ViewDeck extends React.Component {
                 <Panel title={ deck.name }>
                     <div className='btn-group col-xs-12'>
                         <ConfirmedButton onClick={ this.handleDeleteClick }><Trans>Delete</Trans></ConfirmedButton>
+                        <button onClick={ this.handleEditClick } className='btn btn-success'><Trans>Edit</Trans></button>
                     </div>
                     <DeckSummary deck={ deck } cards={ cards } />
                 </Panel>
@@ -39,6 +46,7 @@ ViewDeck.propTypes = {
     deck: PropTypes.object.isRequired,
     i18n: PropTypes.object,
     onDeleteDeck: PropTypes.func.isRequired,
+    onEditDeck: PropTypes.func.isRequired,
     t: PropTypes.func
 };
 

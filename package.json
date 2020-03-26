@@ -1,7 +1,7 @@
 {
-  "name": "keyteki",
+  "name": "manateki",
   "version": "2.0.0",
-  "description": "A Keyforge Card Game Server",
+  "description": "A Manacrest Card Game Server",
   "main": "index.js",
   "scripts": {
     "mongod": "mongod --dbpath=/data --port 27017\n",
@@ -23,7 +23,7 @@
     "url": "git+https://github.com/keyteki/keyteki.git"
   },
   "keywords": [
-    "keyforge",
+    "manacrest",
     "cardgame"
   ],
   "author": "Various",
@@ -59,6 +59,7 @@
     "express": "^4.15.5",
     "express-session": "^1.15.6",
     "helmet": "^3.8.1",
+    "history": "^4.10.1",
     "html-webpack-plugin": "^3.2.0",
     "i18next": "^17.0.8",
     "i18next-browser-languagedetector": "^3.0.2",

@@ -19,9 +19,9 @@ class Community extends React.Component {
                         <p>Link: <a href='https://manacrest.com/discord' target='_blank' rel='noopener noreferrer'>Manacrest Discord</a></p>
                         <p>Discord is a text and voice communicaton application.</p>
                     </Trans>
-                    
+
                     <h3>Manacrest Subreddit</h3>
-                    <Trans i18nKey='community.discord'>
+                    <Trans i18nKey='community.reddit'>
                         <p>Link: <a href='https://reddit.com/r/manacrest' target='_blank' rel='noopener noreferrer'>/r/Manacrest Subreddit</a></p>
                         <p>Reddit is a community message board.</p>
                     </Trans>

@@ -58,8 +58,6 @@ class BaseAbility {
 
         if(properties.mode === 'select') {
             return new AbilityTargetSelect(name, properties, this);
-        } else if(properties.mode === 'house') {
-            return new AbilityTargetHouse(name, properties, this);
         } else if(properties.mode === 'ability') {
             return new AbilityTargetAbility(name, properties, this);
         } else if(properties.mode === 'trait') {
