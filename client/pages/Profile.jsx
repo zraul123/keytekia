@@ -205,10 +205,6 @@ class Profile extends React.Component {
             { name: 'none', label: this.translate('none'), imageUrl: 'img/bgs/blank.png' }
         ];
 
-        for(let i = 0; i < Constants.Houses.length; ++i) {
-            backgrounds.push({ name: Constants.HousesNames[i], label: this.translate(Constants.Houses[i]), imageUrl: `img/bgs/${Constants.Houses[i]}.png` });
-        }
-
         let cardSizes = [
             { name: 'small', label: this.translate('small') },
             { name: 'normal', label: this.translate('normal') },
