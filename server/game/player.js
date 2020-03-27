@@ -210,8 +210,8 @@ class Player extends GameObject {
     /**
      * Shuffles the deck, emitting an event and displaying a message in chat
      */
-    shuffleDeck() {
-        if(this.name !== 'Dummy Player') {
+    shuffleDeck(addMessage) {
+        if(addMessage && this.name !== 'Dummy Player') {
             this.game.addMessage('{0} is shuffling their deck', this);
         }
 

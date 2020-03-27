@@ -12,7 +12,7 @@ class SupplyPhase extends Phase {
     }
 
     refillMana() {
-        this.game.actions.gainMana().resolve(this.game.activePlayer, this.game.getFrameworkContext());
+        this.game.actions.gainMana({refill: true}).resolve(this.game.activePlayer, this.game.getFrameworkContext());
     }
 
     drawCards() {

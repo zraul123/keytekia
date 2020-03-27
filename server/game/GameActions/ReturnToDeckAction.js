@@ -4,6 +4,7 @@ class ReturnToDeckAction extends CardGameAction {
     setDefaultProperties() {
         this.bottom = false;
         this.shuffle = false;
+        this.addMessage = true;
     }
 
     setup() {
@@ -21,9 +22,8 @@ class ReturnToDeckAction extends CardGameAction {
 
         return super.createEvent(eventName, { card: card, context: context }, () => {
             card.owner.moveCard(card, 'deck', { bottom: this.bottom });
-            let cardsByOwner = this.target.filter(c => c.owner === card.owner);
-            if(this.shuffle && cardsByOwner.findIndex(c => c === card) === cardsByOwner.length - 1) {
-                card.owner.shuffleDeck();
+            if(this.shuffle) {
+                card.owner.shuffleDeck(this.addMessage);
             }
         });
     }

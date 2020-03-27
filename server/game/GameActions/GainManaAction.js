@@ -3,7 +3,7 @@ const PlayerAction = require('./PlayerAction');
 class GainManaAction extends PlayerAction {
     setDefaultProperties() {
         this.amount = 5;
-        this.refill = true;
+        this.refill = false;
     }
 
     setup() {
@@ -16,9 +16,7 @@ class GainManaAction extends PlayerAction {
     }
 
     getEvent(player, context) {
-        if(this.refill) {
-            context.game.addMessage('{0} refills {1} mana.', player, this.amount);
-        }
+        context.game.addMessage('{0} refills {1} mana.', player, this.amount);
 
         let params = {
             player: player,
@@ -26,7 +24,13 @@ class GainManaAction extends PlayerAction {
             context: context
         };
         return super.createEvent('onModifyMana', params, event => {
-            player.mana = Math.max(event.amount, 5);
+            if (this.refill) {
+                player.mana = 5;
+            }
+            else {
+                var totalMana = player.mana + event.amount;
+                player.mana = totalMana;
+            }
         });
     }
 
