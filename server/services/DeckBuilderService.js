@@ -5,10 +5,6 @@ const uuid = require('uuid');
 
 const templateDeck = {
     'expansion': 0,
-    // username
-    // uuid
-    // identiy
-    // name
     'cardback': './img/cards/cardback.png',
     'factions': ['alchemist'],
     'cards': [
@@ -75,6 +71,30 @@ class DeckBuilderService {
 
     getDeck(username) {
         return this.buildingDecks[username];
+    }
+
+    async getSavedDeck(id) {
+        return await this.decks.find({ _id: id }).then(deck => {
+            return deck[0];
+        }).catch(err => {
+            logger.error(err);
+        });
+    }
+
+    async updateDeck(deck) {
+        return await this.decks.findOneAndUpdate(
+            { _id: deck._id },
+            {
+                $set: {
+                    cards: deck.cards,
+                    name: deck.name,
+                    total: deck.total
+                } },
+            {
+                upsert: true,
+                new: true
+            }
+        );
     }
 
     saveDeck(username, deckName) {

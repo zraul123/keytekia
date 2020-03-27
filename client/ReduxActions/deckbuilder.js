@@ -1,4 +1,4 @@
-import $ from 'jquery'
+import $ from 'jquery';
 
 const apiRoute = "/api/deckbuilder";
 
@@ -20,6 +20,32 @@ export function removeCardFromBuilder(cardId, count, successCallback, errorCallb
     return { type: 'DEFFERED' };
 }
 
+export function getSavedDeck(deckId, successCallback, errorCallback) {
+    $.ajax({
+        url: '/api/deckbuilder/' + deckId,
+        type: 'GET',
+        headers: buildAuthorizationHeaders(),
+        success: successCallback,
+        error: errorCallback
+    });
+
+    return { type: 'DEFFERED' };
+}
+
+export function updateDeck(deck, successCallback, errorCallback) {
+    $.ajax({
+        url: '/api/deckbuilder/update',
+        type: 'PUT',
+        data: JSON.stringify({ deck: deck }),
+        contentType: 'application/json',
+        headers: buildAuthorizationHeaders(),
+        success: successCallback,
+        error: errorCallback
+    });
+
+    return { type: 'DEFFERED' };
+}
+
 export function getBuilderDeck(successCallback, errorCallback) {
     makeRequest('GET', successCallback, errorCallback);
 
@@ -28,7 +54,7 @@ export function getBuilderDeck(successCallback, errorCallback) {
 
 export function saveBuilderDeck(deckName, successCallback, errorCallback) {
     makeRequest('POST', successCallback, errorCallback, {deckName: deckName});
-    
+
     return { type: 'DEFFERED' };
 }
 

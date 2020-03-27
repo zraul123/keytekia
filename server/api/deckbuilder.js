@@ -14,17 +14,23 @@ module.exports.init = function(server) {
     server.put('/api/deckbuilder', passport.authenticate('jwt', {session:false}), wrapAsync(async function(req, res) {
         deckBuilderService.create(req.user.username).then(
             res.send({success: true})
-        )
+        );
     }));
 
     server.patch('/api/deckbuilder', passport.authenticate('jwt', {session:false}), wrapAsync(async function(req, res) {
-        var buildingDeck = deckBuilderService.addCard(req.user.username, req.body.cardId)
+        var buildingDeck = deckBuilderService.addCard(req.user.username, req.body.cardId);
         res.send({ success: true, buildingDeck: buildingDeck });
     }));
 
     server.delete('/api/deckbuilder', passport.authenticate('jwt', {session:false}), wrapAsync(async function(req, res) {
-        var buildingDeck = deckBuilderService.removeCard(req.user.username, req.body.cardId, req.body.count)
-        res.send({success: true, buildingDeck: buildingDeck });
+        var buildingDeck = deckBuilderService.removeCard(req.user.username, req.body.cardId, req.body.count);
+        res.send({ success: true, buildingDeck: buildingDeck });
+    }));
+
+    server.get('/api/deckbuilder/:id', passport.authenticate('jwt', {session:false}), wrapAsync(async function(req, res) {
+        deckBuilderService.getSavedDeck(req.params.id).then((deck) => {
+            res.send({ success: true, deck: deck });
+        });
     }));
 
     server.get('/api/deckbuilder', passport.authenticate('jwt', {session:false}), wrapAsync(async function(req, res) {
@@ -32,9 +38,15 @@ module.exports.init = function(server) {
         res.send({success: true, deck: deck});
     }));
 
+    server.put('/api/deckbuilder/update', passport.authenticate('jwt', {session:false}), wrapAsync(async function(req, res) {
+        deckBuilderService.updateDeck(req.body.deck).then((deck) => {
+            res.send({ success: true, deck: deck });
+        });
+    }));
+
     server.post('/api/deckbuilder', passport.authenticate('jwt', {session:false}), wrapAsync(async function(req, res) {
         deckBuilderService.saveDeck(req.user.username, req.body.deckName);
-        res.send({success: true});
+        res.send({ success: true });
     }));
 
 }
