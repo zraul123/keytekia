@@ -32,7 +32,7 @@ export class Deckbuilder extends React.Component {
                     this.selectedDeck = res.deck;
                     this.total = this.selectedDeck.total;
                     this.selectedCards = this.selectedDeck.cards;
-                    this.setState({ deckName: this.selectedDeck.name });
+                    this.setState({ deckName: this.selectedDeck.name, value: this.selectedDeck.name });
                 }
             });
         }
@@ -75,32 +75,32 @@ export class Deckbuilder extends React.Component {
         if(this.props.id) {
             return (
                 <Panel title={ 'Deck Editor' }>
+                    <div className='deck-builder-settings'>
+                        Deck name:&nbsp; <input type='text' className='__input' value={ this.state.value } onChange={ this.handleChange } />
+                        <button disabled={ this.total < 35 || this.total > 45 } onClick={ this.updateButtonClicked } className='saveButton'>Update</button>
+                    </div>
                     <Panel title={ 'Available Cards' } className='deckbuilder-container available-cards-panel'>
                         { this.state.loadedCards ? this.getCards() : 'Loading' }
                     </Panel>
                     <Panel title={ 'Selected Cards (' + this.total + ')' } className='deckbuilder-container selected-cards-panel'>
                         { this.getSelectedCards() }
                     </Panel>
-                    <div className='deck-builder-settings'>
-                        Deck name:&nbsp; <input type='text' value={ this.state.value } onChange={ this.handleChange } />
-                        <button disabled={ this.total < 35 || this.total > 45 } onClick={ this.updateButtonClicked } className='saveButton'>Update</button>
-                    </div>
                 </Panel>
             );
         }
 
         return (
-            <Panel title={'Deckbuilder'}>
-                <Panel title={'Available Cards'} className='deckbuilder-container available-cards-panel'>
-                    {this.state.loadedCards ? this.getCards() : 'Loading'}
-                </Panel>
-                <Panel title={'Selected Cards (' + this.total + ')' } className='deckbuilder-container selected-cards-panel'>
-                    {this.getSelectedCards()}
-                </Panel>
-                <div className="deck-builder-settings">
-                    Deck name:&nbsp; <input type="text" value={this.state.value} onChange={this.handleChange} />
-                    <button disabled={ this.total < 35 || this.total > 45 } onClick={this.saveButtonClicked} className="saveButton">Save</button>
+            <Panel title={ 'Deck Builder' }>
+                <div className='deck-builder-settings'>
+                    Deck name:&nbsp; <input type='text' className='__input' value={ this.state.value } onChange={ this.handleChange } />
+                    <button disabled={ this.total < 35 || this.total > 45 } onClick={ this.saveButtonClicked } className='saveButton'>Save</button>
                 </div>
+                <Panel title={ 'Available Cards' } className='deckbuilder-container available-cards-panel'>
+                    { this.state.loadedCards ? this.getCards() : 'Loading' }
+                </Panel>
+                <Panel title={ 'Selected Cards (' + this.total + ')' } className='deckbuilder-container selected-cards-panel'>
+                    { this.getSelectedCards() }
+                </Panel>
             </Panel>
         );
     }

@@ -24,12 +24,10 @@ class GainManaAction extends PlayerAction {
             context: context
         };
         return super.createEvent('onModifyMana', params, event => {
-            if (this.refill) {
+            if(this.refill) {
                 player.mana = 5;
-            }
-            else {
-                var totalMana = player.mana + event.amount;
-                player.mana = totalMana;
+            } else {
+                player.mana = player.mana + event.amount;
             }
         });
     }

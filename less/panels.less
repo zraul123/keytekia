@@ -1,10 +1,10 @@
 .panel {
     font-family: Keyforge;
-    
+
     -moz-box-shadow: 3px 3px 5px @brand-primary;
-    -webkit-box-shadow: 3px 3px 5px @brand-primary;       
+    -webkit-box-shadow: 3px 3px 5px @brand-primary;
     box-shadow: 3px 3px 5px @brand-primary;
-    
+
     .panel-heading {
         font-weight: normal;
         background-size: cover;
@@ -103,17 +103,17 @@
 ::-webkit-scrollbar {
     width: 10px;
   }
-  
+
   /* Track */
   ::-webkit-scrollbar-track {
     background: #F08080;
   }
-  
+
   /* Handle */
   ::-webkit-scrollbar-thumb {
     background: @brand-primary;
   }
-  
+
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
     background: #B22222;
@@ -165,7 +165,15 @@
   }
 
   .deck-builder-settings {
-      font-family: 'Manacrest';
-      display: inline-block;
-      width: 100%;
+    font-family: 'Manacrest';
+    align-items: center;
+    padding: 4px;
+    display: flex;
+    width: 100%;
+
+    > .__input {
+      margin: 4px;
+      height: 38px;
+      width: 30rem;
+    }
   }
